@@ -4,15 +4,21 @@ import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+import { Helmet, HelmetProvider } from "react-helmet-async";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <HelmetProvider>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+      <Helmet async>
+        <script defer async crossOrigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
+      </Helmet>
+    </HelmetProvider>
   </React.StrictMode>
 );
 

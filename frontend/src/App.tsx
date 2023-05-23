@@ -1,6 +1,6 @@
 import { Alert, AlertColor, Box, Container, CssBaseline, Snackbar } from "@mui/material";
 import { Breakpoint, ThemeProvider, createTheme } from '@mui/material/styles';
-import React from "react";
+import React, { useEffect } from "react";
 import { Outlet, Route, Routes } from "react-router-dom";
 import Dashboard from "./component/dashboard";
 import Login from "./component/login";
@@ -19,10 +19,22 @@ import NiceModal from "@ebay/nice-modal-react";
 import { Copyright } from "@mui/icons-material";
 import "./App.css";
 
+import 'facebook-js-sdk'
 
 const defaultTheme = createTheme();
 
 function App() {
+  useEffect(() => {
+    window.fbAsyncInit = () => {
+      window.FB.init({
+        appId: process.env.REACT_APP_FACEBOOK_CLIENT_ID,
+        autoLogAppEvents: true,
+        xfbml: true,
+        version: 'v16.0'
+      })
+    }
+  }, [])
+
   return (
     <Box className="App">
       <Provider store={store}>
