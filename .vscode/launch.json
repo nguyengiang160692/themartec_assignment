@@ -23,6 +23,10 @@
                 "MONGO_USERNAME": "themartec_user",
                 "MONGO_PASSWORD": "themartec_password",
                 "JWT_SECRET": "themartec_secret",
+                "LINKEDIN_CLIENT_ID": "862jkqky51ie7u",
+                "LINKEDIN_CLIENT_SECRET": "PRXd2G4C3Wm6B2h3",
+                "FACEBOOK_CLIENT_ID": "1408482479990299",
+                "FACEBOOK_CLIENT_SECRET": "5f19fbf2ab957c3178b6b98731f04880"
             }
         }
     ]

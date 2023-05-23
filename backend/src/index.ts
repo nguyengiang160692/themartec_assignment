@@ -1,6 +1,7 @@
 // Create expressjs application
 import express from 'express';
 import authRoutes from './routes/auth';
+import authorizedRedirectRoutes from './routes/authorized_redirect';
 import mongoose from 'mongoose';
 import { exit } from 'process';
 import dotenv from 'dotenv';
@@ -55,6 +56,7 @@ passport.use(new BearerStrategy(
 ));
 
 app.use('/api/auth', authRoutes);
+app.use('/authorized_redirect', authorizedRedirectRoutes)
 
 //for debug purpose only 
 process.on('unhandledRejection', (reason, p) => {
