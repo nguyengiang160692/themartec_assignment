@@ -20,11 +20,20 @@ if (localToken) {
     }
 }
 
+interface userFacebook {
+    name?: string
+}
+interface userLinkedin {
+    name?: string
+}
+
 const initialState = {
     token: localToken || null,
     isAuthenticated: false,
     isLoading: false,
     user: user ? JSON.parse(user) : null,
+    userFacebook: {} as userFacebook,
+    userLinkedin: {} as userLinkedin,
 };
 
 // HOW TO APP EFFECT Frontend
@@ -59,11 +68,17 @@ export const authSlice = createSlice({
         },
         registerSuccess: (state, action) => {
             window.location.href = '/';
+        },
+        loginSuccessViaFacebook: (state, action) => {
+            state.userFacebook = action.payload
+        },
+        loginSuccessViaLinkedin: (state, action) => {
+            state.userLinkedin = action.payload
         }
     },
 });
 
-export const { userLoading, loginSuccess, logoutSuccess, registerSuccess, loadProfileSuccess } = authSlice.actions;
+export const { userLoading, loginSuccess, logoutSuccess, registerSuccess, loadProfileSuccess, loginSuccessViaFacebook, loginSuccessViaLinkedin } = authSlice.actions;
 
 
 // HOW TO APP CALL Backend & interact with another store reducers
@@ -185,5 +200,23 @@ export const deposit = (amount: number, cb: Function): AppThunk => async (dispat
 
     cb && cb();
 };
+
+export const loginFacebook = (user: any): AppThunk => async (dispatch, getState) => {
+    dispatch(loginSuccessViaFacebook(user))
+
+    dispatch(openSnackbar({
+        message: 'Successfully login via Facebook!',
+        severity: 'success',
+    }));
+}
+
+export const loginLinkedin = (user: any): AppThunk => async (dispatch, getState) => {
+    dispatch(loginSuccessViaLinkedin(user))
+
+    dispatch(openSnackbar({
+        message: 'Successfully login via Linkedin!',
+        severity: 'success',
+    }));
+}
 
 export default authSlice.reducer;
