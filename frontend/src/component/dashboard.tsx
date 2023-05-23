@@ -3,6 +3,7 @@ import { Container, Grid, Box } from "@mui/material";
 import LoginSocial from './misc/loginSocial'
 import PostModal from "./modal/postModal";
 import { useModal } from "@ebay/nice-modal-react";
+import { AddCircleOutline } from "@mui/icons-material";
 
 function Dashboard() {
   const postModalTrigger = useModal(PostModal)
@@ -20,13 +21,15 @@ function Dashboard() {
               <LoginSocial />
             </Box>
             <hr />
-            <Box sx={{ mt: 4 }}>
-              <Button variant="outlined" onClick={openUpModal}>
-                <Typography>
-                  Post now
-                </Typography>
-              </Button>
-            </Box>
+            <Grid container flexDirection={'row'} justifyContent={'end'}>
+              <Grid item>
+                <Button variant="outlined" onClick={openUpModal} endIcon={<AddCircleOutline />}>
+                  <Typography>
+                    Post now
+                  </Typography>
+                </Button>
+              </Grid>
+            </Grid>
           </Stack>
         </Box>
       </Container>

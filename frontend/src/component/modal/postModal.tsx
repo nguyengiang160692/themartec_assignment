@@ -2,6 +2,7 @@ import NiceModal, { useModal } from "@ebay/nice-modal-react";
 import { Modal, Box, Typography, Button, TextField, Stack } from "@mui/material";
 import { useAppDispatch } from "../../redux/store";
 import { newPost } from "../../redux/post";
+import { AddCircleOutline } from "@mui/icons-material";
 
 export default NiceModal.create(({ }) => {
     const modal = useModal();
@@ -58,6 +59,7 @@ export default NiceModal.create(({ }) => {
                         <Button
                             type="submit"
                             variant="contained"
+                            endIcon={<AddCircleOutline />}
                         >
                             Post now
                         </Button>
