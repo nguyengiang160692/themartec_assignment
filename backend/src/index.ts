@@ -1,7 +1,6 @@
 // Create expressjs application
 import express from 'express';
 import authRoutes from './routes/auth';
-import authorizedRedirectRoutes from './routes/authorized_redirect';
 import postRoutes from './routes/post';
 import mongoose from 'mongoose';
 import { exit } from 'process';
@@ -57,7 +56,6 @@ passport.use(new BearerStrategy(
 ));
 
 app.use('/api/auth', authRoutes);
-app.use('/authorized_redirect', authorizedRedirectRoutes)
 app.use('/api/post', postRoutes);
 
 //for debug purpose only 

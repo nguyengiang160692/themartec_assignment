@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "dev": "concurrently --raw \"npx tsc -w\" \"nodemon output/index.js\" "
+    "dev": "concurrently --raw \"npx tsc -w\" \"nodemon output/index.js\" ",
+    "setup": "cp .env.example .env"
   },
   "dependencies": {
     "@types/cors": "^2.8.13",

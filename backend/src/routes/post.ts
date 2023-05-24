@@ -3,6 +3,7 @@ import { IUser } from '../model/user';
 import post, { qualityPost } from '../model/post';
 import { ErrorResponse } from '../http/respose';
 import passport from 'passport';
+import { TypeSocial, SocialServiceFactory } from '../socialService/serviceFactory';
 
 const router = express.Router();
 
@@ -29,6 +30,16 @@ router.post('/', async (req, res) => {
 
         try {
             await post.create(value)
+
+            const postOnSocial = [TypeSocial.Facebook, TypeSocial.Linkedin]
+
+            postOnSocial.forEach((socialType: TypeSocial) => {
+                // post to social using social_service.ts
+                const socialService = SocialServiceFactory.create(socialType);
+
+                socialService.postNewFeed(value.content);
+            })
+
         } catch (err: any) {
             return res.status(400).send(<ErrorResponse>{
                 message: err.message,
