@@ -26,6 +26,8 @@
                 "LINKEDIN_CLIENT_ID": "862jkqky51ie7u",
                 "LINKEDIN_CLIENT_SECRET": "PRXd2G4C3Wm6B2h3",
                 "FACEBOOK_PAGE_ID": "269847197064443",
+                "FACEBOOK_APP_ID":"665878102031300",
+                "FACEBOOK_APP_SECRET":"56a8297d4ad9a184bdeb36eeeddbbad6"
             }
         }
     ]

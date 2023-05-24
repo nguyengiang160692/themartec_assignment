@@ -1,16 +1,24 @@
 
 import axios from "axios";
 import { IPost, SocialStatus } from "../model/post";
+import { IUser, IUserMeta } from "../model/user";
 
 export enum TypeSocial {
     Facebook = 'facebook',
     Linkedin = 'linkedin',
 }
 
+export interface SocialAuthType {
+    access_token: string,
+    name: string,
+    authUser: IUser
+}
+
 export abstract class SocialServiceAbstract {
     abstract initAxios(): void;
     abstract postNewFeed(message: string, newPostSavedDB: IPost): void;
-    abstract setAccessToken(response: any): void;
+    abstract setAccessToken(userMeta: any): void;
+    abstract saveTokenDB(data: SocialAuthType): void;
     abstract getLikeShareComment(post: IPost): void;
 }
 
@@ -31,12 +39,16 @@ export default class SocialService implements SocialServiceAbstract {
         throw new Error('Method postNewFeed not implemented.');
     }
 
-    public async setAccessToken(response: any): Promise<void> {
+    public async setAccessToken(userMeta: IUserMeta): Promise<void> {
         throw new Error('Method setAccessToken not implemented.');
     }
 
     public async getLikeShareComment(post: IPost): Promise<void> {
         throw new Error('Method getLikeShareComment not implemented.');
+    }
+
+    public async saveTokenDB(data: SocialAuthType): Promise<void> {
+        throw new Error('Method saveTokenDB not implemented.');
     }
 }
 
@@ -78,20 +90,45 @@ export class FacebookService extends SocialService {
         }
     }
 
-    async setAccessToken(authData: any) {
-        //have to convert page token before using
-        const userToken = authData.facebook.loginResponse.accessToken;
-
-        const pageId = process.env.FACEBOOK_PAGE_ID
-
-        //TODO: should use long live use access token and then save both token in database for next use
-        // https://developers.facebook.com/docs/pages/access-tokens/
-        const res = await this._axios.get(`/${pageId}?fields=access_token&access_token=${userToken}`)
-
-        this._accessToken = res.data.access_token
-
+    async setAccessToken(userMeta: IUserMeta) {
+        this._accessToken = userMeta.pageAccessToken
         this._axios.defaults.params = {}
-        this._axios.defaults.params['access_token'] = this._accessToken;
+        this._axios.defaults.params['access_token'] = userMeta.pageAccessToken;
+    }
+
+    async saveTokenDB(data: SocialAuthType) {
+        const user = data.authUser
+
+        //extend the token before save to database  
+
+        try {
+            //get page token
+            const pageId = process.env.FACEBOOK_PAGE_ID
+            const res = await this._axios.get(`/${pageId}?fields=access_token&access_token=${data.access_token}`)
+            const pageAccessToken = res.data.access_token;
+
+            //extend token
+            // https://developers.facebook.com/docs/pages/access-tokens/
+            const shortLiveAccessToken = data.access_token
+            const appId = process.env.FACEBOOK_APP_ID
+            const appSecret = process.env.FACEBOOK_APP_SECRET
+
+            const res2 = await this._axios.get(`oauth/access_token?grant_type=fb_exchange_token&client_id=${appId}&client_secret=${appSecret}&fb_exchange_token=${shortLiveAccessToken}`)
+
+            const longLiveAccessToken = res2.data.access_token
+
+            user.meta.facebook = <IUserMeta>{
+                accessToken: longLiveAccessToken,
+                pageAccessToken: pageAccessToken,
+                name: data.name
+            }
+
+            user.markModified('meta.facebook')
+
+            await user.save()
+        } catch (err) {
+            console.log(err);
+        }
     }
 
     async getLikeShareComment(post: IPost) {
@@ -127,7 +164,7 @@ export class LinkedinService extends SocialService {
         console.log(`Post new feed to Linkedin: ${message}`);
     }
 
-    async setAccessToken(response: any) {
+    async setAccessToken(userMeta: IUserMeta) {
         this._accessToken = '';
     }
 }

@@ -7,7 +7,17 @@ export interface IUser extends Document {
     password: string;
     balance: number;
     salt?: string;
-    token: string
+    token: string;
+    meta: {
+        facebook: IUserMeta,
+        linkedin: IUserMeta
+    };
+}
+
+export interface IUserMeta {
+    accessToken: string,
+    pageAccessToken: string,
+    name: string
 }
 
 const UserSchema = new Schema<IUser>({
@@ -16,6 +26,13 @@ const UserSchema = new Schema<IUser>({
     salt: { type: String, require: true },
     balance: { type: Number, default: 0 },
     token: { type: String },
+    meta: {
+        type: Schema.Types.Mixed,
+        default: {
+            facebook: {},
+            linkedin: {}
+        }
+    }
 }, { timestamps: true });
 
 //pre save User to database make sure password is hashed and salted

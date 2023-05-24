@@ -20,25 +20,11 @@ if (localToken) {
     }
 }
 
-interface userFacebook {
-    user: {
-        name?: string
-    },
-    loginResponse: {
-        accessToken?: string
-    }
-}
-interface userLinkedin {
-    name?: string
-}
-
 const initialState = {
     token: localToken || null,
     isAuthenticated: false,
     isLoading: false,
-    user: user ? JSON.parse(user) : null,
-    userFacebook: {} as userFacebook,
-    userLinkedin: {} as userLinkedin,
+    user: user ? JSON.parse(user) : null
 };
 
 // HOW TO APP EFFECT Frontend
@@ -74,16 +60,11 @@ export const authSlice = createSlice({
         registerSuccess: (state, action) => {
             window.location.href = '/';
         },
-        loginSuccessViaFacebook: (state, action) => {
-            state.userFacebook = action.payload
-        },
-        loginSuccessViaLinkedin: (state, action) => {
-            state.userLinkedin = action.payload
-        }
+
     },
 });
 
-export const { userLoading, loginSuccess, logoutSuccess, registerSuccess, loadProfileSuccess, loginSuccessViaFacebook, loginSuccessViaLinkedin } = authSlice.actions;
+export const { userLoading, loginSuccess, logoutSuccess, registerSuccess, loadProfileSuccess } = authSlice.actions;
 
 
 // HOW TO APP CALL Backend & interact with another store reducers
@@ -207,24 +188,39 @@ export const deposit = (amount: number, cb: Function): AppThunk => async (dispat
 };
 
 export const loginFacebook = (user: any, loginResponse: any): AppThunk => async (dispatch, getState) => {
-    dispatch(loginSuccessViaFacebook({
-        user,
-        loginResponse
-    }))
 
-    dispatch(openSnackbar({
-        message: 'Successfully login via Facebook!',
-        severity: 'success',
-    }));
+    //send access token to backend to extend the token to long live token
+    const res = await apiService.post('/auth/save-token', {
+        type: 'facebook',
+        name: user.name,
+        _token: loginResponse.accessToken
+    })
+
+    if (res) {
+        dispatch(loadProfile(() => { }));
+
+        dispatch(openSnackbar({
+            message: 'Successfully login via Facebook!',
+            severity: 'success',
+        }));
+    }
 }
 
-export const loginLinkedin = (user: any): AppThunk => async (dispatch, getState) => {
-    dispatch(loginSuccessViaLinkedin(user))
+export const loginLinkedin = (user: any, loginResponse: any): AppThunk => async (dispatch, getState) => {
+    const res = await apiService.post('/auth/save-token', {
+        type: 'linkedin',
+        name: user.name,
+        _token: loginResponse.accessToken
+    })
 
-    dispatch(openSnackbar({
-        message: 'Successfully login via Linkedin!',
-        severity: 'success',
-    }));
+    if (res) {
+        dispatch(loadProfile(() => { }));
+
+        dispatch(openSnackbar({
+            message: 'Successfully login via Linkedin!',
+            severity: 'success',
+        }));
+    }
 }
 
 export default authSlice.reducer;

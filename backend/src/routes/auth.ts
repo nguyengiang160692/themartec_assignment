@@ -6,6 +6,7 @@ import { User, IUser, qualityUser } from '../model/user';
 import { createNewUser, getUserByUsernameAndPassword, generateNewToken } from '../services';
 import { ErrorResponse, SuccessResponse } from '../http/respose'
 import passport from 'passport';
+import { SocialServiceFactory } from '../socialService/serviceFactory';
 
 const router = express.Router();
 
@@ -14,9 +15,6 @@ router.get('/index', (req, res) => {
         message: 'Connected APIs'
     });
 });
-
-//TODO: user get profile
-//TODO: add middleware to check token on few routes
 
 // User register
 router.post('/register', (req, res) => {
@@ -114,6 +112,7 @@ router.get('/profile', passport.authenticate('bearer', { session: false }), (req
             data: {
                 username: authUser.username,
                 balance: authUser.balance,
+                meta: authUser.meta,
             },
             message: 'Get profile success!',
             code: 200
@@ -123,7 +122,6 @@ router.get('/profile', passport.authenticate('bearer', { session: false }), (req
     }
 })
 
-//TODO implement this by revoke token
 router.post('/logout', passport.authenticate('bearer', { session: false }), async (req, res) => {
     const authUser: IUser = req.user as IUser;
 
@@ -141,10 +139,32 @@ router.post('/logout', passport.authenticate('bearer', { session: false }), asyn
     }
 })
 
-//TODO: route to deposit money (this is admin API, deposit for users)
+//save token from client to database
+router.post('/save-token', passport.authenticate('bearer', { session: false }), async (req, res) => {
+    const authUser: IUser = req.user as IUser;
 
-//TODO: route to create new item in draft state (this is admin API)
+    const type = req.body.type;
+    const access_token = req.body._token;
+    const name = req.body.name;
 
-//TODO: route to get all items with filter (with pagination and sorting)
+    if (authUser) {
+        //extend the token to long live token
+        const social = SocialServiceFactory.create(type)
+
+        await social.saveTokenDB({
+            access_token: access_token,
+            name: name,
+            authUser: authUser
+        })
+
+        const response: SuccessResponse = {
+            data: null,
+            message: 'Save token success!',
+            code: 200
+        }
+
+        return res.status(200).send(response)
+    }
+})
 
 export default router;

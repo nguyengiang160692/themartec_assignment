@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 
 const LoginSocial = () => {
     const dispatch = useAppDispatch()
-    const userFacebook = useSelector((state: RootState) => state.auth.userFacebook)
+    const auth = useSelector((state: RootState) => state.auth)
 
     const loginFacebookHandle = (event: React.MouseEvent<HTMLElement>) => {
         FB.login((loginResponse) => {
@@ -26,13 +26,13 @@ const LoginSocial = () => {
             <Grid item>
                 <Button variant="contained" sx={{ backgroundColor: '#3578e5' }} onClick={loginFacebookHandle}>
                     {
-                        userFacebook?.user?.name &&
+                        auth?.user?.meta?.facebook?.name &&
                         <Typography>
-                            Hello, {userFacebook?.user?.name || ''}
+                            Hello, {auth?.user?.meta?.facebook?.name || ''}
                         </Typography>
                     }
                     {
-                        !userFacebook?.user?.name &&
+                        !auth?.user?.meta?.facebook?.name &&
                         <Typography>
                             Login Facebook
                         </Typography>

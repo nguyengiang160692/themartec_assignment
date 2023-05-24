@@ -50,7 +50,8 @@ router.post('/', async (req, res) => {
             postOnSocialNetworks.forEach(async (socialType: TypeSocial) => {
                 // post to social using social_service.ts
                 const socialService = SocialServiceFactory.create(socialType);
-                await socialService.setAccessToken(value.authData)
+
+                await socialService.setAccessToken(authUser.meta)
                 await socialService.postNewFeed(value.content, newPost);
             })
 

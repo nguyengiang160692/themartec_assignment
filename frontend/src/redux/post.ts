@@ -20,11 +20,7 @@ export const { } = postSlice.actions;
 export const newPost = (content: string, cb: Function): AppThunk => async (dispatch, getState) => {
     try {
         await apiService.post('/post', {
-            content: content,
-            authData: {
-                facebook: getState().auth.userFacebook,
-                linkedin: getState().auth.userLinkedin,
-            },
+            content: content
         })
 
         dispatch(openSnackbar({

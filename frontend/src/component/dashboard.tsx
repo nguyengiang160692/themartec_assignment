@@ -4,9 +4,19 @@ import LoginSocial from './misc/loginSocial'
 import PostModal from "./modal/postModal";
 import { useModal } from "@ebay/nice-modal-react";
 import { AddCircleOutline } from "@mui/icons-material";
+import { useEffect } from "react";
+import { loadProfile } from "../redux/auth";
+import { useAppDispatch } from "../redux/store";
 
 function Dashboard() {
+  const dispatch = useAppDispatch()
   const postModalTrigger = useModal(PostModal)
+
+  useEffect(() => {
+    dispatch(loadProfile(() => {
+
+    }))
+  }, [])
 
   const openUpModal = () => {
     postModalTrigger.show()
