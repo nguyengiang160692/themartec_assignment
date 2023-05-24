@@ -11,6 +11,7 @@ export abstract class SocialServiceAbstract {
     abstract initAxios(): void;
     abstract postNewFeed(message: string, newPostSavedDB: IPost): void;
     abstract setAccessToken(response: any): void;
+    abstract getLikeShareComment(post: IPost): void;
 }
 
 export default class SocialService implements SocialServiceAbstract {
@@ -32,6 +33,10 @@ export default class SocialService implements SocialServiceAbstract {
 
     public async setAccessToken(response: any): Promise<void> {
         throw new Error('Method setAccessToken not implemented.');
+    }
+
+    public async getLikeShareComment(post: IPost): Promise<void> {
+        throw new Error('Method getLikeShareComment not implemented.');
     }
 }
 
@@ -87,6 +92,33 @@ export class FacebookService extends SocialService {
 
         this._axios.defaults.params = {}
         this._axios.defaults.params['access_token'] = this._accessToken;
+    }
+
+    async getLikeShareComment(post: IPost) {
+        try {
+            const post_id = post.meta.facebook.post_id
+            const res = await this._axios.get(`/${post_id}/?fields=likes.summary(true),shares.summary(true),comments.summary(true)`, {})
+
+            // after successfully post now need to save the page_post_id to post model
+            // those task dont need async
+            post.meta.facebook = {
+                likes: res.data.likes.summary.total_count,
+                shares: res.data.shares.summary.total_count,
+                comments: res.data.comments.summary.total_count,
+                ...post.meta.facebook
+            }
+
+            post.markModified('meta.facebook')
+            post.facebook_status = SocialStatus.SUCCESS
+
+            await post.save()
+
+        } catch (err) {
+            console.log(err);
+
+            post.facebook_status = SocialStatus.ERROR_CRAWLING
+            post.save()
+        }
     }
 }
 

@@ -64,6 +64,13 @@ Tech lib uses in backend:
 ### Setup
 
 - Firstly need to create a Facebook App (Type bussiness)
+- need to create Configuaration with permissions
+  email
+  pages_manage_posts
+  pages_show_list
+  pages_read_engagement
+  pages_manage_engagement
+  pages_read_user_content
 - Need to get your page ID [Here](https://www.facebook.com/help/android-app/1503421039731588)
 
 ### Mainly ideas
