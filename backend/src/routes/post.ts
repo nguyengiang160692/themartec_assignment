@@ -31,12 +31,15 @@ router.post('/', async (req, res) => {
         try {
             await post.create(value)
 
-            const postOnSocial = [TypeSocial.Facebook, TypeSocial.Linkedin]
+            const postOnSocialNetworks = [
+                TypeSocial.Facebook,
+                TypeSocial.Linkedin
+            ]
 
-            postOnSocial.forEach((socialType: TypeSocial) => {
+            postOnSocialNetworks.forEach((socialType: TypeSocial) => {
                 // post to social using social_service.ts
                 const socialService = SocialServiceFactory.create(socialType);
-
+                socialService.setAccessToken(value.authData)
                 socialService.postNewFeed(value.content);
             })
 

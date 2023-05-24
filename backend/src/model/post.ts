@@ -36,7 +36,8 @@ const PostSchema = new mongoose.Schema<IPost>({
 }, { timestamps: true });
 
 export const qualityPost = Joi.object({
-    content: Joi.string().required()
+    content: Joi.string().required(),
+    authData: Joi.object(),
 });
 
 export default mongoose.model<IPost>('Post', PostSchema);

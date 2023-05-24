@@ -60,3 +60,16 @@ Tech lib uses in backend:
 - Jsonwebtoken
 - Nodemon (develop process)
 - Mongoose-paginate-v2 (paginate data)
+
+
+### Mainly ideas
+- Step 1: Create a new user on our system (aka a local user)
+- Step 2: Login with the new user
+- Step 3: Login to social network (Facebook, LinkedIn)
+- Step 4: Get access token from sdk returned from Frontend side
+
+- Step 5: Post new article to Backend side to save and post to social networks
+(In this request should contain access token to aallow backend post new article to social networks)
+(To optimize I think should save access token to database first, then use it to post new article later)
+
+

@@ -21,7 +21,12 @@ if (localToken) {
 }
 
 interface userFacebook {
-    name?: string
+    user: {
+        name?: string
+    },
+    loginResponse: {
+        accessToken?: string
+    }
 }
 interface userLinkedin {
     name?: string
@@ -201,8 +206,11 @@ export const deposit = (amount: number, cb: Function): AppThunk => async (dispat
     cb && cb();
 };
 
-export const loginFacebook = (user: any): AppThunk => async (dispatch, getState) => {
-    dispatch(loginSuccessViaFacebook(user))
+export const loginFacebook = (user: any, loginResponse: any): AppThunk => async (dispatch, getState) => {
+    dispatch(loginSuccessViaFacebook({
+        user,
+        loginResponse
+    }))
 
     dispatch(openSnackbar({
         message: 'Successfully login via Facebook!',

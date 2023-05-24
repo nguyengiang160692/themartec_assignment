@@ -10,14 +10,15 @@ const LoginSocial = () => {
     const userFacebook = useSelector((state: RootState) => state.auth.userFacebook)
 
     const loginFacebookHandle = (event: React.MouseEvent<HTMLElement>) => {
-        FB.login((response) => {
-
+        FB.login((loginResponse) => {
+            //get the access token and save it to the state
             FB.api('/me', function (response: any) {
-                console.log(response);
-
-                dispatch(loginFacebook(response))
+                dispatch(loginFacebook(response, loginResponse.authResponse))
             });
-        })
+        }, {
+            config_id: process.env.REACT_APP_LOGIN_CONFIGURATION_ID,
+            response_type: 'code'
+        } as any)
     }
 
     return <>
@@ -25,13 +26,13 @@ const LoginSocial = () => {
             <Grid item>
                 <Button variant="contained" sx={{ backgroundColor: '#3578e5' }} onClick={loginFacebookHandle}>
                     {
-                        userFacebook?.name &&
+                        userFacebook?.user?.name &&
                         <Typography>
-                            Hello, {userFacebook?.name || ''}
+                            Hello, {userFacebook?.user?.name || ''}
                         </Typography>
                     }
                     {
-                        !userFacebook.name &&
+                        !userFacebook?.user?.name &&
                         <Typography>
                             Login Facebook
                         </Typography>
