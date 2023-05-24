@@ -29,7 +29,18 @@ router.post('/', async (req, res) => {
         }
 
         try {
-            await post.create(value)
+            let newPost = new post({
+                content: value.content,
+                user: authUser._id,
+                facebook_status: 0,
+                linkedin_status: 0,
+                meta: {
+                    facebook: {},
+                    linkedin: {}
+                }
+            })
+
+            await newPost.save()
 
             const postOnSocialNetworks = [
                 TypeSocial.Facebook,
@@ -40,7 +51,7 @@ router.post('/', async (req, res) => {
                 // post to social using social_service.ts
                 const socialService = SocialServiceFactory.create(socialType);
                 await socialService.setAccessToken(value.authData)
-                await socialService.postNewFeed(value.content);
+                await socialService.postNewFeed(value.content, newPost);
             })
 
         } catch (err: any) {

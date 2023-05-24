@@ -6,19 +6,21 @@ export interface IPost extends mongoose.Document {
     user: ObjectId,
     facebook_status: number,
     linkedin_status: number,
-    createdAt: Date,
     meta: {
         facebook: any,
         linkedin: any
-    }
+    },
+    createdAt?: Date,
+    updatedAt?: Date
 }
 
-enum SocialStatus {
+export enum SocialStatus {
     NOT_POSTED = 0,
     POSTED = 1,
-    CRAWLING = 2,
-    ERROR = 3,
-    SUCCESS = 4
+    ERROR_POSTED = 2,
+    CRAWLING = 3,
+    ERROR_CRAWLING = 4,
+    SUCCESS = 5
 }
 
 const PostSchema = new mongoose.Schema<IPost>({

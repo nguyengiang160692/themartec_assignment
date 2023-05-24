@@ -1,5 +1,6 @@
 
 import axios from "axios";
+import { IPost, SocialStatus } from "../model/post";
 
 export enum TypeSocial {
     Facebook = 'facebook',
@@ -8,7 +9,7 @@ export enum TypeSocial {
 
 export abstract class SocialServiceAbstract {
     abstract initAxios(): void;
-    abstract postNewFeed(message: string): void;
+    abstract postNewFeed(message: string, newPostSavedDB: IPost): void;
     abstract setAccessToken(response: any): void;
 }
 
@@ -25,7 +26,7 @@ export default class SocialService implements SocialServiceAbstract {
         throw new Error('Method initAxios not implemented.');
     }
 
-    public async postNewFeed(message: string): Promise<void> {
+    public async postNewFeed(message: string, newPostSavedDB: IPost): Promise<void> {
         throw new Error('Method postNewFeed not implemented.');
     }
 
@@ -44,7 +45,7 @@ export class FacebookService extends SocialService {
         });
     }
 
-    async postNewFeed(message: string) {
+    async postNewFeed(message: string, newPostSavedDB: IPost) {
         console.log(`Post new feed to Facebook: ${message}`);
 
         const pageId = process.env.FACEBOOK_PAGE_ID
@@ -57,6 +58,15 @@ export class FacebookService extends SocialService {
 
             // after successfully post now need to save the page_post_id to post model
             // those task dont need async
+            newPostSavedDB.meta.facebook = {
+                post_id: res.data.id,
+                ...newPostSavedDB.meta.facebook
+            }
+
+            newPostSavedDB.markModified('meta.facebook')
+            newPostSavedDB.facebook_status = SocialStatus.POSTED
+
+            await newPostSavedDB.save()
 
         } catch (err) {
             console.log(err);
@@ -81,7 +91,7 @@ export class FacebookService extends SocialService {
 }
 
 export class LinkedinService extends SocialService {
-    async postNewFeed(message: string) {
+    async postNewFeed(message: string, newPostSavedDB: IPost) {
         console.log(`Post new feed to Linkedin: ${message}`);
     }
 
