@@ -20,7 +20,7 @@ function Dashboard() {
 
   const openUpModal = () => {
     postModalTrigger.show()
-  }
+  } 
 
   return (
     <>

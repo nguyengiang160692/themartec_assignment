@@ -7,11 +7,18 @@ export interface IPost extends mongoose.Document {
     facebook_status: number,
     linkedin_status: number,
     meta: {
-        facebook: any,
-        linkedin: any
+        facebook: IPostMeta,
+        linkedin: IPostMeta
     },
     createdAt?: Date,
     updatedAt?: Date
+}
+
+export interface IPostMeta {
+    post_id: string,
+    likes: number,
+    shares: number,
+    comments: number
 }
 
 export enum SocialStatus {

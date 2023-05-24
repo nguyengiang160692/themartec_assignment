@@ -1,6 +1,9 @@
 import { Jwt, sign } from "jsonwebtoken";
 import { User, IUser } from "./model/user";
 import { MongoServerError } from 'mongodb'
+import nodeSchedule from 'node-schedule'
+import { TypeSocial, SocialServiceFactory } from "./socialService/serviceFactory";
+import post, { IPost } from "./model/post";
 
 export const createNewUser = async (model: IUser) => {
     const newUser = new User(model);
@@ -58,4 +61,20 @@ export const addBalance = async (user: IUser, amount: number): Promise<Boolean> 
 
         return false;
     }
+}
+
+export const appSchedule = async () => {
+    //schedule job every 15 minutes for update post likes shares comments
+    nodeSchedule.scheduleJob('*/15 * * * *', async () => {
+        //get all posts in database which is not updated
+        const posts: IPost[] = await post.find({})
+
+        //loop through all posts
+        for (let i = 0; i < posts.length; i++) {
+            const facebookService = SocialServiceFactory.create(TypeSocial.Facebook)
+            const linkedinService = SocialServiceFactory.create(TypeSocial.Linkedin)
+            facebookService.getLikeShareComment(posts[i])
+            linkedinService.getLikeShareComment(posts[i])
+        }
+    });
 }

@@ -51,7 +51,7 @@ router.post('/', async (req, res) => {
                 // post to social using social_service.ts
                 const socialService = SocialServiceFactory.create(socialType);
 
-                await socialService.setAccessToken(authUser.meta)
+                await socialService.setAccessToken(authUser.meta[socialType])
                 await socialService.postNewFeed(value.content, newPost);
             })
 

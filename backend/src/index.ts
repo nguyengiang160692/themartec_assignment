@@ -11,6 +11,7 @@ import cors from 'cors';
 import passport from 'passport';
 import { Strategy as BearerStrategy } from 'passport-http-bearer';
 import { IUser, User } from './model/user'
+import { appSchedule } from './services';
 
 dotenv.config();
 
@@ -67,5 +68,7 @@ process.on('unhandledRejection', (reason, p) => {
 app.listen(port, () => {
     console.log(`app listening at http://localhost:${port}`);
 })
+
+appSchedule()
 
 export default app;

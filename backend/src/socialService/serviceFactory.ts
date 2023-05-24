@@ -77,7 +77,9 @@ export class FacebookService extends SocialService {
             // those task dont need async
             newPostSavedDB.meta.facebook = {
                 post_id: res.data.id,
-                ...newPostSavedDB.meta.facebook
+                likes: 0,
+                shares: 0,
+                comments: 0,
             }
 
             newPostSavedDB.markModified('meta.facebook')
@@ -139,10 +141,10 @@ export class FacebookService extends SocialService {
             // after successfully post now need to save the page_post_id to post model
             // those task dont need async
             post.meta.facebook = {
+                ...post.meta.facebook,
                 likes: res.data.likes.summary.total_count,
                 shares: res.data.shares.summary.total_count,
                 comments: res.data.comments.summary.total_count,
-                ...post.meta.facebook
             }
 
             post.markModified('meta.facebook')
