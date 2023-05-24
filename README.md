@@ -61,8 +61,13 @@ Tech lib uses in backend:
 - Nodemon (develop process)
 - Mongoose-paginate-v2 (paginate data)
 
+### Setup
+
+- Firstly need to create a Facebook App (Type bussiness)
+- Need to get your page ID [Here](https://www.facebook.com/help/android-app/1503421039731588)
 
 ### Mainly ideas
+
 - Step 1: Create a new user on our system (aka a local user)
 - Step 2: Login with the new user
 - Step 3: Login to social network (Facebook, LinkedIn)
@@ -72,4 +77,7 @@ Tech lib uses in backend:
 (In this request should contain access token to aallow backend post new article to social networks)
 (To optimize I think should save access token to database first, then use it to post new article later)
 
+- I got a situation here, I found that can not post to my own wall with facebook restriction since (2018)
+- So I will have to create a facebook page then post though that
 
+- Step 6: After get access token from FE, now I have to exchange that token to page token to allow interact with page [Reference here](https://developers.facebook.com/docs/pages/access-tokens/)

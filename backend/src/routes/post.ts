@@ -36,11 +36,11 @@ router.post('/', async (req, res) => {
                 TypeSocial.Linkedin
             ]
 
-            postOnSocialNetworks.forEach((socialType: TypeSocial) => {
+            postOnSocialNetworks.forEach(async (socialType: TypeSocial) => {
                 // post to social using social_service.ts
                 const socialService = SocialServiceFactory.create(socialType);
-                socialService.setAccessToken(value.authData)
-                socialService.postNewFeed(value.content);
+                await socialService.setAccessToken(value.authData)
+                await socialService.postNewFeed(value.content);
             })
 
         } catch (err: any) {

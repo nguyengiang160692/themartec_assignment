@@ -25,11 +25,11 @@ export default class SocialService implements SocialServiceAbstract {
         throw new Error('Method initAxios not implemented.');
     }
 
-    public postNewFeed(message: string): void {
+    public async postNewFeed(message: string): Promise<void> {
         throw new Error('Method postNewFeed not implemented.');
     }
 
-    public setAccessToken(response: any): void {
+    public async setAccessToken(response: any): Promise<void> {
         throw new Error('Method setAccessToken not implemented.');
     }
 }
@@ -40,23 +40,40 @@ export class FacebookService extends SocialService {
 
     initAxios() {
         this._axios = axios.create({
-            baseURL: 'https://graph.facebook.com/v16.0',
-            timeout: 1000
+            baseURL: 'https://graph.facebook.com/v16.0'
         });
     }
 
-    postNewFeed(message: string) {
+    async postNewFeed(message: string) {
         console.log(`Post new feed to Facebook: ${message}`);
 
-        this._axios.post('/me', {}).then((res: any) => {
-            console.log(res);
-        }).catch((err: any) => {
+        const pageId = process.env.FACEBOOK_PAGE_ID
+
+        try {
+            const res = await this._axios.post(`/${pageId}/feed`, {
+                message: message,
+                access_token: this._accessToken
+            })
+
+            // after successfully post now need to save the page_post_id to post model
+            // those task dont need async
+
+        } catch (err) {
             console.log(err);
-        });
+        }
     }
 
-    setAccessToken(authData: any) {
-        this._accessToken = authData.facebook.loginResponse.accessToken;
+    async setAccessToken(authData: any) {
+        //have to convert page token before using
+        const userToken = authData.facebook.loginResponse.accessToken;
+
+        const pageId = process.env.FACEBOOK_PAGE_ID
+
+        //TODO: should use long live use access token and then save both token in database for next use
+        // https://developers.facebook.com/docs/pages/access-tokens/
+        const res = await this._axios.get(`/${pageId}?fields=access_token&access_token=${userToken}`)
+
+        this._accessToken = res.data.access_token
 
         this._axios.defaults.params = {}
         this._axios.defaults.params['access_token'] = this._accessToken;
@@ -64,11 +81,11 @@ export class FacebookService extends SocialService {
 }
 
 export class LinkedinService extends SocialService {
-    postNewFeed(message: string) {
+    async postNewFeed(message: string) {
         console.log(`Post new feed to Linkedin: ${message}`);
     }
 
-    setAccessToken(response: any) {
+    async setAccessToken(response: any) {
         this._accessToken = '';
     }
 }
