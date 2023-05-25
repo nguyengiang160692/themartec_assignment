@@ -26,6 +26,7 @@ export default class SocialService implements SocialServiceAbstract {
 
     _accessToken: string = ''
     _axios: any = null
+    _axiosLinkedinAuth: any = null
 
     constructor() {
         this.initAxios();
@@ -164,8 +165,15 @@ export class FacebookService extends SocialService {
 export class LinkedinService extends SocialService {
 
     initAxios() {
-        this._axios = axios.create({
+        this._axiosLinkedinAuth = axios.create({
             baseURL: 'https://www.linkedin.com/oauth/v2'
+        })
+
+        this._axios = axios.create({
+            baseURL: 'https://api.linkedin.com/v2',
+            headers: {
+                'X-Restli-Protocol-Version': '2.0.0',
+            }
         });
     }
 
@@ -174,13 +182,16 @@ export class LinkedinService extends SocialService {
     }
 
     async setAccessToken(userMeta: IUserMeta) {
-        this._accessToken = '';
+        this._accessToken = userMeta.accessToken
+
+        this._axios.defaults.params = {}
+        this._axios.defaults.headers['Authorization'] = `Bearer ${this._accessToken}`
     }
 
     async saveTokenDB(data: SocialAuthType) {
         const user = data.authUser
 
-        const res = await this._axios.post('/accessToken', {
+        const res = await this._axiosLinkedinAuth.post('/accessToken', {
             'grant_type': 'authorization_code',
             'code': data.access_token,
             'redirect_uri': process.env.LINKEDIN_REDIRECT_URI,
@@ -192,10 +203,18 @@ export class LinkedinService extends SocialService {
             }
         })
 
+        const res2 = await this._axios.get('/me', {
+            headers: {
+                'Authorization': 'Bearer ' + res.data.access_token,
+            }
+        })
+
+        const fullName = res2.data.localizedFirstName + ' ' + res2.data.localizedLastName
+
         //get userinfo data
         user.meta.linkedin = <IUserMeta>{
             accessToken: res.data.access_token,
-            name: data.name
+            name: fullName
         }
 
         user.markModified('meta.linkedin')
