@@ -184,10 +184,7 @@ router.get('/linkedin/callback', async (req, res) => {
         authUser: authUser
     })
 
-    // return res.redirect('http://localhost:3006/auction');
-    return res.status(200).send({
-        message: 'Login success!'
-    })
+    return res.redirect('http://localhost:3006/auction');
 })
 
 export default router;

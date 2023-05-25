@@ -53,7 +53,19 @@ const LoginSocial = () => {
             </Grid>
             <Grid item>
                 <Button variant="contained" sx={{ backgroundColor: '#0362c0' }} onClick={loginLinkedinHandle}>
-                    Link Linkedin
+
+                    {
+                        auth?.user?.meta?.linkedin?.name &&
+                        <Typography>
+                            Hello, {auth?.user?.meta?.linkedin?.name || ''}
+                        </Typography>
+                    }
+                    {
+                        !auth?.user?.meta?.linkedin?.name &&
+                        <Typography>
+                            Link Linkedin
+                        </Typography>
+                    }
                 </Button>
             </Grid>
 

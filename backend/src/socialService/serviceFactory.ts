@@ -192,6 +192,7 @@ export class LinkedinService extends SocialService {
             }
         })
 
+        //get userinfo data
         user.meta.linkedin = <IUserMeta>{
             accessToken: res.data.access_token,
             name: data.name
