@@ -136,6 +136,15 @@ export class FacebookService extends SocialService {
 
     async getLikeShareComment(post: IPost) {
         try {
+            console.log('get like share comment of facebook post');
+
+            //get the user creator of the post
+            const postPopulated: IPost = await post.populate('user')
+
+            const meta: IUserMeta = postPopulated.user.meta.facebook
+
+            this.setAccessToken(meta)
+
             const post_id = post.meta.facebook.post_id
             const res = await this._axios.get(`/${post_id}/?fields=likes.summary(true),shares.summary(true),comments.summary(true)`, {})
 
@@ -143,9 +152,9 @@ export class FacebookService extends SocialService {
             // those task dont need async
             post.meta.facebook = {
                 ...post.meta.facebook,
-                likes: res.data.likes.summary.total_count,
-                shares: res.data.shares.summary.total_count,
-                comments: res.data.comments.summary.total_count,
+                likes: res.data.likes?.summary.total_count || 0,
+                shares: res.data.shares?.count || 0,
+                comments: res.data.comments?.summary.total_count || 0,
             }
 
             post.markModified('meta.facebook')
@@ -220,6 +229,10 @@ export class LinkedinService extends SocialService {
         user.markModified('meta.linkedin')
 
         await user.save()
+    }
+
+    async getLikeShareComment(post: IPost) {
+        console.log('Get like share comment from Linkedin post');
     }
 }
 

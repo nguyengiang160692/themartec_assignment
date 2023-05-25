@@ -1,9 +1,10 @@
 import Joi from 'joi';
 import mongoose, { ObjectId } from 'mongoose';
+import { IUser } from './user';
 
 export interface IPost extends mongoose.Document {
     content: string;
-    user: ObjectId,
+    user: IUser,
     facebook_status: number,
     linkedin_status: number,
     meta: {
@@ -32,8 +33,8 @@ export enum SocialStatus {
 
 const PostSchema = new mongoose.Schema<IPost>({
     content: { type: String, required: true },
-    facebook_status: { type: Number, default: 0, enum: [0, 1, 2, 3, 4] },
-    linkedin_status: { type: Number, default: 0, enum: [0, 1, 2, 3, 4] },
+    facebook_status: { type: Number, default: 0, enum: [0, 1, 2, 3, 4, 5] },
+    linkedin_status: { type: Number, default: 0, enum: [0, 1, 2, 3, 4, 5] },
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     meta: {
         type: mongoose.Schema.Types.Mixed,

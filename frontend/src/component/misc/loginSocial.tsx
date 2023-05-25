@@ -3,7 +3,8 @@ import React from "react";
 import { useAppDispatch, RootState } from "../../redux/store";
 import { loginFacebook } from '../../redux/auth'
 import { useSelector } from "react-redux";
-
+import FacebookIcon from '@mui/icons-material/Facebook';
+import LinkedInIcon from '@mui/icons-material/LinkedIn';
 
 const LoginSocial = () => {
     const dispatch = useAppDispatch()
@@ -36,7 +37,7 @@ const LoginSocial = () => {
     return <>
         <Grid container spacing={2}>
             <Grid item>
-                <Button variant="contained" sx={{ backgroundColor: '#3578e5' }} onClick={loginFacebookHandle}>
+                <Button variant="contained" startIcon={<FacebookIcon />} sx={{ backgroundColor: '#0362c0' }} onClick={loginFacebookHandle}>
                     {
                         auth?.user?.meta?.facebook?.name &&
                         <Typography>
@@ -52,8 +53,7 @@ const LoginSocial = () => {
                 </Button>
             </Grid>
             <Grid item>
-                <Button variant="contained" sx={{ backgroundColor: '#0362c0' }} onClick={loginLinkedinHandle}>
-
+                <Button variant="contained" startIcon={<LinkedInIcon />} sx={{ backgroundColor: '#0362c0' }} onClick={loginLinkedinHandle}>
                     {
                         auth?.user?.meta?.linkedin?.name &&
                         <Typography>

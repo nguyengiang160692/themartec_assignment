@@ -3,10 +3,11 @@ import { Container, Grid, Box } from "@mui/material";
 import LoginSocial from './misc/loginSocial'
 import PostModal from "./modal/postModal";
 import { useModal } from "@ebay/nice-modal-react";
-import { AddCircleOutline } from "@mui/icons-material";
 import { useEffect } from "react";
 import { loadProfile } from "../redux/auth";
 import { useAppDispatch } from "../redux/store";
+import AddBoxIcon from '@mui/icons-material/AddBox';
+import SyncIcon from '@mui/icons-material/Sync';
 
 function Dashboard() {
   const dispatch = useAppDispatch()
@@ -20,7 +21,11 @@ function Dashboard() {
 
   const openUpModal = () => {
     postModalTrigger.show()
-  } 
+  }
+
+  const syncInsight = () => {
+
+  }
 
   return (
     <>
@@ -31,11 +36,18 @@ function Dashboard() {
               <LoginSocial />
             </Box>
             <hr />
-            <Grid container flexDirection={'row'} justifyContent={'end'}>
+            <Grid container flexDirection={'row'} justifyContent={'end'} columnSpacing={2}>
               <Grid item>
-                <Button variant="outlined" onClick={openUpModal} endIcon={<AddCircleOutline />}>
+                <Button variant="contained" onClick={openUpModal} endIcon={<AddBoxIcon />}>
                   <Typography>
                     Post now
+                  </Typography>
+                </Button>
+              </Grid>
+              <Grid item>
+                <Button variant="outlined" onClick={syncInsight} endIcon={<SyncIcon />}>
+                  <Typography>
+                    Sync insights
                   </Typography>
                 </Button>
               </Grid>
