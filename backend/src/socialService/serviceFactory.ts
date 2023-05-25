@@ -286,22 +286,23 @@ export class LinkedinService extends SocialService {
             // //get the user creator of the post
             // const postPopulated: IPost = await post.populate('user')
 
-            // const meta: IUserMeta = postPopulatenod.user.meta.linkedin
+            // const meta: IUserMeta = postPopulated.user.meta.linkedin
 
             // this.setAccessToken(meta)
 
             // const post_id = post.meta.linkedin.post_id
 
-            // I will need to get detail base on crawling method
-            // https://www.linkedin.com/embed/feed/update/${post_id}
+            // // I will need to get detail base on crawling method
+            // // https://www.linkedin.com/embed/feed/update/${post_id}
 
-            // after successfully post now need to save the page_post_id to post model
-            // those task dont need async
+
+            // // after successfully post now need to save the page_post_id to post model
+            // // those task dont need async
             // post.meta.linkedin = {
             //     ...post.meta.linkedin,
-            //     likes: res.data.likes?.summary.total_count || 0,
-            //     shares: res.data.shares?.count || 0,
-            //     comments: res.data.comments?.summary.total_count || 0,
+            //     likes: likeCount || 0,
+            //     shares: 0,
+            //     comments: commentCount || 0,
             // }
 
             // post.markModified('meta.linkedin')
