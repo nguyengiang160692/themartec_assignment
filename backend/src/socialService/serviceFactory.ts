@@ -162,12 +162,44 @@ export class FacebookService extends SocialService {
 }
 
 export class LinkedinService extends SocialService {
+
+    initAxios() {
+        this._axios = axios.create({
+            baseURL: 'https://www.linkedin.com/oauth/v2'
+        });
+    }
+
     async postNewFeed(message: string, newPostSavedDB: IPost) {
         console.log(`Post new feed to Linkedin: ${message}`);
     }
 
     async setAccessToken(userMeta: IUserMeta) {
         this._accessToken = '';
+    }
+
+    async saveTokenDB(data: SocialAuthType) {
+        const user = data.authUser
+
+        const res = await this._axios.post('/accessToken', {
+            'grant_type': 'authorization_code',
+            'code': data.access_token,
+            'redirect_uri': process.env.LINKEDIN_REDIRECT_URI,
+            'client_id': process.env.LINKEDIN_CLIENT_ID,
+            'client_secret': process.env.LINKEDIN_CLIENT_SECRET
+        }, {
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        })
+
+        user.meta.linkedin = <IUserMeta>{
+            accessToken: res.data.access_token,
+            name: data.name
+        }
+
+        user.markModified('meta.linkedin')
+
+        await user.save()
     }
 }
 

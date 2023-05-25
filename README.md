@@ -73,18 +73,31 @@ Tech lib uses in backend:
   pages_read_user_content
 - Need to get your page ID [Here](https://www.facebook.com/help/android-app/1503421039731588)
 
-### Mainly ideas
 
+### How to use (Basic flow)
 - Step 1: Create a new user on our system (aka a local user)
 - Step 2: Login with the new user
-- Step 3: Login to social network (Facebook, LinkedIn)
-- Step 4: Get access token from sdk returned from Frontend side
 
-- Step 5: Post new article to Backend side to save and post to social networks
-(In this request should contain access token to aallow backend post new article to social networks)
-(To optimize I think should save access token to database first, then use it to post new article later)
-
+### Mainly ideas (For facebook)
 - I got a situation here, I found that can not post to my own wall with facebook restriction since (2018)
 - So I will have to create a facebook page then post though that
 
-- Step 6: After get access token from FE, now I have to exchange that token to page token to allow interact with page [Reference here](https://developers.facebook.com/docs/pages/access-tokens/)
+- Step 3: Login to social network
+  - On frontend side the SDK will handle login process with given configuration (Facebook configuration scope), then facebook return to us short-live token, then send that token to backend side to exchange to long-live token (Because is require app_secret_key so we do on backend) and also exchange for page-token (to post on page) [Reference here](https://developers.facebook.com/docs/pages/access-tokens/)
+  
+- Step 4: Post new article to Backend side to save and post to social networks (we have long live token & page token on previous step), after success posted there is returned post_id, so we can continue to fetch likes share comments count on cronjob schedule
+
+### Mainly ideas (For Linkedin)
+
+Because linkedin dont have sdk so We have to handle Oauth 2 process manually [Reference here](https://learn.microsoft.com/en-us/linkedin/shared/authentication/authorization-code-flow?context=linkedin%2Fconsumer%2Fcontext&tabs=HTTPS1)
+
+- Step 1: On frontend we have to redirect user browser to linkedin login page with some params
+https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=YOUR_CLIENT_ID^&redirect_uri=YOUR_REDIRECT_URI^&state=YOUR_STATE^&scope=YOUR_SCOPE
+  - after user successfully approved, linkedin will redirect to your redirect_uri with code and state params
+
+- Step 2: 
+
+
+
+
+

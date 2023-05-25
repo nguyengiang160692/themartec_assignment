@@ -5,8 +5,8 @@ import express from 'express';
 import { User, IUser, qualityUser } from '../model/user';
 import { createNewUser, getUserByUsernameAndPassword, generateNewToken } from '../services';
 import { ErrorResponse, SuccessResponse } from '../http/respose'
-import passport from 'passport';
-import { SocialServiceFactory } from '../socialService/serviceFactory';
+import passport, { use } from 'passport';
+import SocialService, { SocialServiceFactory, TypeSocial } from '../socialService/serviceFactory';
 
 const router = express.Router();
 
@@ -113,6 +113,7 @@ router.get('/profile', passport.authenticate('bearer', { session: false }), (req
                 username: authUser.username,
                 balance: authUser.balance,
                 meta: authUser.meta,
+                id: authUser._id
             },
             message: 'Get profile success!',
             code: 200
@@ -165,6 +166,28 @@ router.post('/save-token', passport.authenticate('bearer', { session: false }), 
 
         return res.status(200).send(response)
     }
+})
+
+// OAuth2
+router.get('/linkedin/callback', async (req, res) => {
+    //redirect back to frontend
+    const code: any = req.query.code;
+    const id: any = req.query.state;
+
+    const social: SocialService = SocialServiceFactory.create(TypeSocial.Linkedin)
+
+    const authUser: IUser = (await User.findOne({ _id: id }))!
+
+    await social.saveTokenDB({
+        access_token: code,
+        name: authUser.username,
+        authUser: authUser
+    })
+
+    // return res.redirect('http://localhost:3006/auction');
+    return res.status(200).send({
+        message: 'Login success!'
+    })
 })
 
 export default router;

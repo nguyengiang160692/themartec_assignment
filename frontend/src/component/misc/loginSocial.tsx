@@ -21,6 +21,18 @@ const LoginSocial = () => {
         } as any)
     }
 
+    const loginLinkedinHandle = (event: React.MouseEvent<HTMLElement>) => {
+        //redirect to linkedin login page
+        let redirect_url = 'https://www.linkedin.com/oauth/v2/authorization?'
+        redirect_url += 'response_type=code&'
+        redirect_url += `client_id=${process.env.REACT_APP_LINKEDIN_CLIENT_ID}&`
+        redirect_url += `redirect_uri=${process.env.REACT_APP_LINKEDIN_REDIRECT_URI}&`
+        redirect_url += `state=${auth.user.id}&`
+        redirect_url += encodeURI('scope=r_liteprofile r_emailaddress w_member_social')
+
+        window.location.href = redirect_url
+    }
+
     return <>
         <Grid container spacing={2}>
             <Grid item>
@@ -34,14 +46,14 @@ const LoginSocial = () => {
                     {
                         !auth?.user?.meta?.facebook?.name &&
                         <Typography>
-                            Login Facebook
+                            Link Facebook
                         </Typography>
                     }
                 </Button>
             </Grid>
             <Grid item>
-                <Button variant="contained" sx={{ backgroundColor: '#0362c0' }}>
-                    Login Linkedin
+                <Button variant="contained" sx={{ backgroundColor: '#0362c0' }} onClick={loginLinkedinHandle}>
+                    Link Linkedin
                 </Button>
             </Grid>
 

@@ -66,6 +66,8 @@ export const addBalance = async (user: IUser, amount: number): Promise<Boolean> 
 export const appSchedule = async () => {
     //schedule job every 15 minutes for update post likes shares comments
     nodeSchedule.scheduleJob('*/15 * * * *', async () => {
+        console.log('Run schedule Job every 15 minutes');
+
         //get all posts in database which is not updated
         const posts: IPost[] = await post.find({})
 
