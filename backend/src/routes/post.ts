@@ -43,7 +43,7 @@ router.post('/', async (req, res) => {
             await newPost.save()
 
             const postOnSocialNetworks = [
-                TypeSocial.Facebook,
+                // TypeSocial.Facebook,
                 TypeSocial.Linkedin
             ]
 

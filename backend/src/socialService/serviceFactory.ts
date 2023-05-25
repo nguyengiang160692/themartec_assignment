@@ -2,6 +2,7 @@
 import axios from "axios";
 import { IPost, SocialStatus } from "../model/post";
 import { IUser, IUserMeta } from "../model/user";
+import cheerio from 'cheerio';
 
 export enum TypeSocial {
     Facebook = 'facebook',
@@ -281,34 +282,44 @@ export class LinkedinService extends SocialService {
                 return;
             }
 
-            // console.log('Get like share comment from Linkedin post');
+            console.log('Get like share comment from Linkedin post');
 
-            // //get the user creator of the post
-            // const postPopulated: IPost = await post.populate('user')
+            //get the user creator of the post
+            const postPopulated: IPost = await post.populate('user')
 
-            // const meta: IUserMeta = postPopulated.user.meta.linkedin
+            const meta: IUserMeta = postPopulated.user.meta.linkedin
 
-            // this.setAccessToken(meta)
+            this.setAccessToken(meta)
 
-            // const post_id = post.meta.linkedin.post_id
+            const post_id = post.meta.linkedin.post_id
 
-            // // I will need to get detail base on crawling method
-            // // https://www.linkedin.com/embed/feed/update/${post_id}
+            const crawlAxios = axios.create({
+                baseURL: `https://www.linkedin.com`
+            })
 
+            const res = await crawlAxios.get(`/embed/feed/update/${post_id}`, {})
 
-            // // after successfully post now need to save the page_post_id to post model
-            // // those task dont need async
-            // post.meta.linkedin = {
-            //     ...post.meta.linkedin,
-            //     likes: likeCount || 0,
-            //     shares: 0,
-            //     comments: commentCount || 0,
-            // }
+            const $ = cheerio.load(res.data)
 
-            // post.markModified('meta.linkedin')
-            // post.linkedin_status = SocialStatus.SUCCESS
+            const likeCount = parseInt($('[data-test-id="social-actions__reaction-count"]').text().trim())
+            const commentCount = parseInt($('[data-test-id="social-actions__comments"]').attr('data-num-comments')!, 10)
 
-            // await post.save()
+            // I will need to get detail base on crawling method
+            // https://www.linkedin.com/embed/feed/update/${post_id}
+
+            // after successfully post now need to save the page_post_id to post model
+            // those task dont need async
+            post.meta.linkedin = {
+                ...post.meta.linkedin,
+                likes: likeCount || 0,
+                shares: 0,
+                comments: commentCount || 0,
+            }
+
+            post.markModified('meta.linkedin')
+            post.linkedin_status = SocialStatus.SUCCESS
+
+            await post.save()
 
         } catch (err) {
             console.log(err);
