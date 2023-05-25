@@ -8,6 +8,7 @@ import { loadProfile } from "../redux/auth";
 import { useAppDispatch } from "../redux/store";
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import SyncIcon from '@mui/icons-material/Sync';
+import { syncInsight } from "../redux/post";
 
 function Dashboard() {
   const dispatch = useAppDispatch()
@@ -23,8 +24,8 @@ function Dashboard() {
     postModalTrigger.show()
   }
 
-  const syncInsight = () => {
-
+  const syncInsightClick = () => {
+    dispatch(syncInsight())
   }
 
   return (
@@ -45,7 +46,7 @@ function Dashboard() {
                 </Button>
               </Grid>
               <Grid item>
-                <Button variant="outlined" onClick={syncInsight} endIcon={<SyncIcon />}>
+                <Button variant="outlined" onClick={syncInsightClick} endIcon={<SyncIcon />}>
                   <Typography>
                     Sync insights
                   </Typography>

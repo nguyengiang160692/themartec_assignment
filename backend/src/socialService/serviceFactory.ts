@@ -271,6 +271,38 @@ export class LinkedinService extends SocialService {
 
     async getLikeShareComment(post: IPost) {
         console.log('Get like share comment from Linkedin post');
+
+        try {
+            //get the user creator of the post
+            const postPopulated: IPost = await post.populate('user')
+
+            const meta: IUserMeta = postPopulated.user.meta.linkedin
+
+            this.setAccessToken(meta)
+
+            const post_id = post.meta.linkedin.post_id
+            const res = await this._axios.get(`/ugcPosts/${post_id}?projection=(likes,shares,comments)`, {})
+
+            // after successfully post now need to save the page_post_id to post model
+            // those task dont need async
+            post.meta.linkedin = {
+                ...post.meta.linkedin,
+                likes: res.data.likes?.summary.total_count || 0,
+                shares: res.data.shares?.count || 0,
+                comments: res.data.comments?.summary.total_count || 0,
+            }
+
+            post.markModified('meta.linkedin')
+            post.linkedin_status = SocialStatus.SUCCESS
+
+            await post.save()
+
+        } catch (err) {
+            console.log(err);
+
+            post.linkedin_status = SocialStatus.ERROR_CRAWLING
+            post.save()
+        }
     }
 }
 

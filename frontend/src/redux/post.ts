@@ -34,4 +34,17 @@ export const newPost = (content: string, cb: Function): AppThunk => async (dispa
     }
 }
 
+export const syncInsight = (): AppThunk => async (dispatch, getState) => {
+    try {
+        await apiService.post('/post/sync-insight');
+
+        dispatch(openSnackbar({
+            message: 'Successfully synced insights!',
+            severity: 'success',
+        }));
+    } catch (err) {
+        console.log(err);
+    }
+}
+
 export default postSlice.reducer;
