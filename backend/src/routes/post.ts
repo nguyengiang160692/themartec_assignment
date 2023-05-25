@@ -75,11 +75,11 @@ router.post('/sync-insight', async (req, res) => {
     //get all post in database
 
     const posts = await post.find({})
-    const facebookService = SocialServiceFactory.create(TypeSocial.Facebook);
+    // const facebookService = SocialServiceFactory.create(TypeSocial.Facebook);
     const linkedinService = SocialServiceFactory.create(TypeSocial.Linkedin);
 
     posts.forEach(async (post: any) => {
-        facebookService.getLikeShareComment(post)
+        // facebookService.getLikeShareComment(post)
         linkedinService.getLikeShareComment(post)
     });
 })
