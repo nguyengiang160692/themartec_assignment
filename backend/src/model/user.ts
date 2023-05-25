@@ -17,7 +17,8 @@ export interface IUser extends Document {
 export interface IUserMeta {
     accessToken: string,
     pageAccessToken: string,
-    name: string
+    name: string,
+    linkedinURN?: string,
 }
 
 const UserSchema = new Schema<IUser>({

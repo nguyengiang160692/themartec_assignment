@@ -188,6 +188,43 @@ export class LinkedinService extends SocialService {
 
     async postNewFeed(message: string, newPostSavedDB: IPost) {
         console.log(`Post new feed to Linkedin: ${message}`);
+
+        //get the user creator of the post
+        const postPopulated: IPost = await newPostSavedDB.populate('user')
+
+        const meta: IUserMeta = postPopulated.user.meta.linkedin
+
+
+        const res = await this._axios.post('/ugcPosts', {
+            author: meta.linkedinURN,
+            lifecycleState: 'PUBLISHED',
+            specificContent: {
+                'com.linkedin.ugc.ShareContent': {
+                    'shareCommentary': {
+                        'text': message
+                    },
+                    'shareMediaCategory': 'NONE'
+                }
+            },
+            visibility: {
+                'com.linkedin.ugc.MemberNetworkVisibility': 'PUBLIC'
+            }
+        })
+
+        // after successfully post now need to save the page_post_id to post model
+        // those task dont need async
+        newPostSavedDB.meta.linkedin = {
+            post_id: res.data.id,
+            likes: 0,
+            shares: 0,
+            comments: 0,
+        }
+
+        newPostSavedDB.markModified('meta.linkedin')
+        newPostSavedDB.linkedin_status = SocialStatus.POSTED
+
+        await newPostSavedDB.save()
+
     }
 
     async setAccessToken(userMeta: IUserMeta) {
@@ -212,7 +249,7 @@ export class LinkedinService extends SocialService {
             }
         })
 
-        const res2 = await this._axios.get('/me', {
+        const res2 = await this._axios.get('/me?projection=(id,localizedFirstName,localizedLastName)', {
             headers: {
                 'Authorization': 'Bearer ' + res.data.access_token,
             }
@@ -223,7 +260,8 @@ export class LinkedinService extends SocialService {
         //get userinfo data
         user.meta.linkedin = <IUserMeta>{
             accessToken: res.data.access_token,
-            name: fullName
+            name: fullName,
+            linkedinURN: `urn:li:person:${res2.data.id}`
         }
 
         user.markModified('meta.linkedin')
