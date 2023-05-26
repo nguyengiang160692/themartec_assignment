@@ -74,7 +74,9 @@ router.post('/', async (req, res) => {
 router.post('/sync-insight', async (req, res) => {
     //get all post in database
 
-    if (process.env.API_POST_ENABLE) {
+    let enable = parseInt(process.env.ENABLE_API_REQUEST!)
+
+    if (parseInt(process.env.ENABLE_API_REQUEST!) === 1) {
         const posts = await post.find({})
         const facebookService = SocialServiceFactory.create(TypeSocial.Facebook);
         const linkedinService = SocialServiceFactory.create(TypeSocial.Linkedin);

@@ -75,7 +75,7 @@ export const appSchedule = async () => {
     nodeSchedule.scheduleJob('*/15 * * * *', async () => {
         console.log('Run schedule Job every 15 minutes');
 
-        if (process.env.API_POST_ENABLE) {
+        if (parseInt(process.env.ENABLE_API_REQUEST!) === 1) {
             //get all posts in database which is not updated
             const posts: IPost[] = await post.find({})
 
