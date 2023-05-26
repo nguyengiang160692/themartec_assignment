@@ -54,6 +54,7 @@ export const authSlice = createSlice({
             state.isAuthenticated = false;
             state.user = null;
             window.localStorage.removeItem('token');
+            window.localStorage.removeItem('user');
 
             window.location.href = '/';
         },

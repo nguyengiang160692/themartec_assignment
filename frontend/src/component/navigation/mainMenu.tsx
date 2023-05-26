@@ -1,9 +1,7 @@
-import { AttachMoney, Sell } from '@mui/icons-material';
 import Logout from '@mui/icons-material/Logout';
 import { AppBar, Stack, Toolbar } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -15,8 +13,6 @@ import * as React from 'react';
 import { logout } from '../../redux/auth';
 import { RootState, useAppDispatch, useAppSelector } from '../../redux/store';
 import Logo from './logo';
-import NiceModal, { useModal } from '@ebay/nice-modal-react';
-import depositModal from '../modal/depositModal';
 
 export default function MainMenu() {
     const dispatch = useAppDispatch()
@@ -25,8 +21,6 @@ export default function MainMenu() {
 
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
-
-    const depositModalTrigger = useModal(depositModal);
 
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
@@ -38,11 +32,6 @@ export default function MainMenu() {
     const handleLogout = () => {
         dispatch(logout())
     }
-
-    const showDepositModal = () => {
-        depositModalTrigger.show()
-    }
-
 
     const username = auth.user?.username as string || ''
 
@@ -79,7 +68,6 @@ export default function MainMenu() {
                                 >
                                     <Typography sx={{ minWidth: 100, marginRight: '10px' }}>Welcome, {username} </Typography>
                                     <Avatar sx={{ width: 32, height: 32, backgroundColor: 'black' }}>{username[0]?.toUpperCase()}</Avatar>
-                                    <Typography sx={{ minWidth: 100, marginLeft: '10px' }}> | Balance: ${auth.user?.balance.toLocaleString()} </Typography>
                                 </IconButton>
                             </Tooltip>
                         </Stack>
@@ -121,9 +109,6 @@ export default function MainMenu() {
                 transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
             >
-                <MenuItem onClick={showDepositModal}>
-                    <AttachMoney /> Deposit
-                </MenuItem>
                 <Divider />
                 <MenuItem onClick={handleLogout}>
                     <ListItemIcon>
