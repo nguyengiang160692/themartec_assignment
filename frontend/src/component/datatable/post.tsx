@@ -6,6 +6,7 @@ import { Box, Grid, Stack, Typography } from '@mui/material';
 import styled from '@emotion/styled';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
+import dayjs from 'dayjs';
 
 const NiceMeta = styled.div`
     font-size: 0.7rem;
@@ -13,7 +14,11 @@ const NiceMeta = styled.div`
     color: white;
     padding: 0px 0.2rem;
     border-radius: 5px;
+`
 
+const NiceContent = styled.div`
+    text-align: left;
+    padding: 20px 0px;
 `
 
 const MetaDisplay = (props: any) => {
@@ -22,7 +27,7 @@ const MetaDisplay = (props: any) => {
             <Grid container spacing={1}>
                 <Grid item>
                     <Typography sx={{ display: 'block', minWidth: '80px' }} fontSize={'0.7rem'}>
-                        <FacebookIcon />
+                        <FacebookIcon sx={{ color: "#1565c0" }} />
                     </Typography>
                 </Grid>
                 <Grid item>
@@ -96,13 +101,22 @@ const PostTable = () => {
             }
         },
         {
+            field: 'createdAt', headerName: 'Posted at', sortable: false,
+            width: 150,
+            valueGetter: (params: GridValueGetterParams) => {
+                return `${dayjs(params.row.createdAt).format('DD/MM/YYsYY HH:MM')}`
+            }
+        },
+        {
             field: 'content',
             headerName: 'Content',
             flex: 4,
             sortable: false,
             align: 'left',
-            valueGetter: (params: GridValueGetterParams) => {
-                return `${params.row.content}`
+            renderCell: (params) => {
+                return <NiceContent>
+                    {params.row.content}
+                </NiceContent>
             }
         },
     ];
@@ -113,6 +127,13 @@ const PostTable = () => {
             bottom: 0
         };
     }, []);
+
+    const handlePaginateModelChange = React.useCallback((params: any) => {
+        let currentPage = params.page + 1
+        setCurrentPage(currentPage)
+        setPageSize(params.pageSize)
+        dispatch(getPosts(currentPage, params.pageSize))
+    }, [])
 
     return <>
         <div style={{ width: '100%' }}>
@@ -130,14 +151,7 @@ const PostTable = () => {
                 }}
                 rowCount={postStore.totalCount}
                 pageSizeOptions={[5, 10]}
-                onPaginationModelChange={(params) => {
-                    console.log(params);
-
-                    let currentPage = params.page + 1
-                    setCurrentPage(currentPage)
-                    setPageSize(params.pageSize)
-                    dispatch(getPosts(currentPage, params.pageSize))
-                }}
+                onPaginationModelChange={handlePaginateModelChange}
             />
         </div>
     </>

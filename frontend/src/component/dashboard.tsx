@@ -10,6 +10,7 @@ import AddBoxIcon from '@mui/icons-material/AddBox';
 import SyncIcon from '@mui/icons-material/Sync';
 import { syncInsight } from "../redux/post";
 import PostTable from "./datatable/post";
+import styled from "@emotion/styled";
 
 
 function Dashboard() {
@@ -30,10 +31,16 @@ function Dashboard() {
     dispatch(syncInsight())
   }
 
+  const FlyingFab = styled(Fab)`
+  position: fixed;
+    bottom: 20px;
+    left: calc(50% - 56px);
+  `
+
   return (
     <>
       <Container disableGutters>
-        <Box sx={{ marginTop: '10px', minHeight: '80vh' }}>
+        <Box sx={{ marginTop: '10px', minHeight: '80vh', marginBottom: '100px' }}>
           <Stack direction="column" spacing={2}>
             <LoginSocial />
             <Box>
@@ -41,9 +48,9 @@ function Dashboard() {
             </Box>
           </Stack>
         </Box>
-        <Fab color="primary" aria-label="add" variant="extended" onClick={openUpModal}>
+        <FlyingFab color="primary" aria-label="add" variant="extended" onClick={openUpModal}>
           <AddBoxIcon sx={{ mr: 1 }} /> Post
-        </Fab>
+        </FlyingFab>
       </Container>
     </>
   );
