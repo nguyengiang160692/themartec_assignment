@@ -1,45 +1,66 @@
-import { GridColDef, GridValueGetterParams, DataGrid } from '@mui/x-data-grid';
+import { GridColDef, GridValueGetterParams, DataGrid, GridRowSpacingParams } from '@mui/x-data-grid';
 import React, { useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { getPosts } from '../../redux/post';
-import { Grid, Stack, Typography } from '@mui/material';
+import { Box, Grid, Stack, Typography } from '@mui/material';
+import styled from '@emotion/styled';
+
+const NiceMeta = styled.div`
+    font-size: 0.7rem;
+    background: grey;
+    padding: 0px 0.2rem;
+    border-radius: 5px;
+
+`
 
 const MetaDisplay = (props: any) => {
     return <>
-        <Grid container spacing={2}>
-            <Grid item>
-                <Typography>
-                    Likes: {props.meta?.facebook?.likes}
-                </Typography>
+        <Stack flexDirection={'column'} justifyContent={'center'}>
+            <Grid container spacing={1}>
+                <Grid item>
+                    <Typography sx={{ display: 'block', minWidth: '80px' }} fontSize={'0.7rem'}>
+                        Facebook
+                    </Typography>
+                </Grid>
+                <Grid item>
+                    <NiceMeta>
+                        {props.meta?.facebook?.likes || 0}
+                    </NiceMeta>
+                </Grid>
+                <Grid item>
+                    <NiceMeta>
+                        {props.meta?.facebook?.shares || 0}
+                    </NiceMeta>
+                </Grid>
+                <Grid item>
+                    <NiceMeta>
+                        {props.meta?.facebook?.comments || 0}
+                    </NiceMeta>
+                </Grid>
             </Grid>
-            <Grid item>
-                <Typography>
-                    Comments: {props.meta?.facebook?.comments}
-                </Typography>
+            <Grid container spacing={1}>
+                <Grid item>
+                    <Typography sx={{ display: 'block', minWidth: '80px' }} fontSize={'0.7rem'}>
+                        Linkedin
+                    </Typography>
+                </Grid>
+                <Grid item>
+                    <NiceMeta>
+                        {props.meta?.linkedin?.likes || 0}
+                    </NiceMeta>
+                </Grid>
+                <Grid item>
+                    <NiceMeta>
+                        {props.meta?.linkedin?.shares || 0}
+                    </NiceMeta>
+                </Grid>
+                <Grid item>
+                    <NiceMeta>
+                        {props.meta?.linkedin?.comments || 0}
+                    </NiceMeta>
+                </Grid>
             </Grid>
-            <Grid item>
-                <Typography>
-                    Shares: {props.meta?.facebook?.shares}
-                </Typography>
-            </Grid>
-        </Grid>
-        <Grid container spacing={2}>
-            <Grid item>
-                <Typography>
-                    Likes: {props.meta?.linkedin?.likes}
-                </Typography>
-            </Grid>
-            <Grid item>
-                <Typography>
-                    Comments: {props.meta?.linkedin?.comments}
-                </Typography>
-            </Grid>
-            <Grid item>
-                <Typography>
-                    Shares: {props.meta?.linkedin?.shares}
-                </Typography>
-            </Grid>
-        </Grid>
+        </Stack>
     </>
 }
 
@@ -55,7 +76,16 @@ const PostTable = () => {
     }, [])
 
     const columns: GridColDef[] = [
-        { field: 'content', headerName: 'Content', flex: 3, sortable: false, },
+        {
+            field: 'content',
+            headerName: 'Content',
+            flex: 3,
+            sortable: false,
+            align: 'left',
+            valueGetter: (params: GridValueGetterParams) => {
+                return `${params.row.content}`
+            }
+        },
         {
             field: 'user', headerName: 'Author', flex: 1, sortable: false,
             valueGetter: (params: GridValueGetterParams) => {
@@ -64,7 +94,7 @@ const PostTable = () => {
         },
         {
             field: 'meta',
-            headerName: 'Meta',
+            headerName: 'Meta (Like/Share/Comment)',
             sortable: false,
             flex: 2,
             renderCell: (params) => (
@@ -73,9 +103,19 @@ const PostTable = () => {
         },
     ];
 
+    const getRowSpacing = React.useCallback((params: GridRowSpacingParams) => {
+        return {
+            top: 0,
+            bottom: 0
+        };
+    }, []);
+
     return <>
-        <div style={{ height: 400, width: '100%' }}>
+        <div style={{ width: '100%' }}>
             <DataGrid
+                autoHeight
+                getRowSpacing={getRowSpacing}
+                getRowHeight={() => 'auto'}
                 getRowId={(row) => row._id}
                 rows={postStore.posts}
                 columns={columns}
