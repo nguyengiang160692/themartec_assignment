@@ -64,7 +64,7 @@ router.post('/login', async (req, res) => {
     }
 
     try {
-        let returnUser = await getUserByIdentifyAndPassword(req.body.indentify, req.body.password)
+        let returnUser = await getUserByIdentifyAndPassword(req.body.identify, req.body.password)
 
         if (returnUser instanceof User && returnUser) {
 

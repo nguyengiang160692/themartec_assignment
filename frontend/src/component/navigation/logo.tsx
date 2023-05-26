@@ -5,7 +5,7 @@ import { css } from "@emotion/css";
 const Logo = () => {
     return <>
         <Box sx={{
-            minWidth: 100,
+            minWidth: 180,
             color: 'white',
             background: 'black',
             outline: '1px solid white',

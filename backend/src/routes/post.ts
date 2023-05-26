@@ -93,8 +93,26 @@ router.post('/sync-insight', async (req, res) => {
 })
 
 //get ths list post
-router.get('/', async (req, res) => {
-    const posts = await post.find({}).populate('user', 'name email').sort({ createdAt: -1 })
+router.get('/', async (req: any, res: any) => {
+    const authUser: IUser = req.user as IUser;
+
+    const page = parseInt(req.query.page) || 1
+    const pageSize = parseInt(req.query.pageSize) || 10
+
+    const posts = await post.find({
+        user: authUser._id
+    })
+        .populate('user', 'username email')
+        .skip((page - 1) * pageSize)
+        .limit(pageSize)
+        .sort({ createdAt: -1 })
+
+    const totalPosts = await post.countDocuments({})
+
+    return res.status(200).json({
+        items: posts,
+        total: totalPosts
+    })
 })
 
 export default router;

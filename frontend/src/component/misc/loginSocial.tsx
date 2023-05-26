@@ -35,7 +35,18 @@ const LoginSocial = () => {
     }
 
     return <>
-        <Grid container spacing={2}>
+        <Grid container
+            justifyContent={
+                {
+                    xs: 'center',
+                    sm: 'space-between'
+                }
+            }
+            rowSpacing={{
+                xs: 1,
+                sm: 0
+            }}
+        >
             <Grid item>
                 <Button variant="contained" startIcon={<FacebookIcon />} sx={{ backgroundColor: '#0362c0' }} onClick={loginFacebookHandle}>
                     {

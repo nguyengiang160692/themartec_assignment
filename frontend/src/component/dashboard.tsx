@@ -9,7 +9,7 @@ import { useAppDispatch } from "../redux/store";
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import SyncIcon from '@mui/icons-material/Sync';
 import { syncInsight } from "../redux/post";
-import PostTable from "./table/post";
+import PostTable from "./datatable/post";
 
 function Dashboard() {
   const dispatch = useAppDispatch()
@@ -34,11 +34,21 @@ function Dashboard() {
       <Container disableGutters>
         <Box sx={{ marginTop: '10px', minHeight: '80vh' }}>
           <Stack direction="column" spacing={2}>
-            <Box sx={{ mt: 4 }}>
-              <LoginSocial />
-            </Box>
+            <LoginSocial />
             <hr />
-            <Grid container flexDirection={'row'} justifyContent={'end'} columnSpacing={2}>
+            <Grid container flexDirection={'row'}
+              justifyContent={{
+                xs: 'center',
+                sm: 'end'
+              }}
+              columnSpacing={{
+                xs: 1,
+              }}
+              rowSpacing={{
+                xs: 1,
+                sm: 0
+              }}
+            >
               <Grid item>
                 <Button variant="contained" onClick={openUpModal} endIcon={<AddBoxIcon />}>
                   <Typography>

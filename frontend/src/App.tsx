@@ -95,7 +95,6 @@ const AdminLayout: React.FC = () => {
         >
           <MainMenu />
           <Content />
-          <Copyright />
         </Box>
       </Container>
     </>
