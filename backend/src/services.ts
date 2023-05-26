@@ -75,15 +75,17 @@ export const appSchedule = async () => {
     nodeSchedule.scheduleJob('*/15 * * * *', async () => {
         console.log('Run schedule Job every 15 minutes');
 
-        //get all posts in database which is not updated
-        const posts: IPost[] = await post.find({})
+        if (process.env.API_POST_ENABLE) {
+            //get all posts in database which is not updated
+            const posts: IPost[] = await post.find({})
 
-        //loop through all posts
-        for (let i = 0; i < posts.length; i++) {
-            const facebookService = SocialServiceFactory.create(TypeSocial.Facebook)
-            const linkedinService = SocialServiceFactory.create(TypeSocial.Linkedin)
-            facebookService.getLikeShareComment(posts[i])
-            linkedinService.getLikeShareComment(posts[i])
+            //loop through all posts
+            for (let i = 0; i < posts.length; i++) {
+                const facebookService = SocialServiceFactory.create(TypeSocial.Facebook)
+                const linkedinService = SocialServiceFactory.create(TypeSocial.Linkedin)
+                facebookService.getLikeShareComment(posts[i])
+                linkedinService.getLikeShareComment(posts[i])
+            }
         }
     });
 }

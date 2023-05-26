@@ -42,10 +42,10 @@ router.post('/', async (req, res) => {
 
             await newPost.save()
 
-            const postOnSocialNetworks = [
+            const postOnSocialNetworks = process.env.API_POST_ENABLE ? [
                 TypeSocial.Facebook,
                 TypeSocial.Linkedin
-            ]
+            ] : []
 
             postOnSocialNetworks.forEach(async (socialType: TypeSocial) => {
                 // post to social using social_service.ts
@@ -74,14 +74,20 @@ router.post('/', async (req, res) => {
 router.post('/sync-insight', async (req, res) => {
     //get all post in database
 
-    const posts = await post.find({})
-    // const facebookService = SocialServiceFactory.create(TypeSocial.Facebook);
-    const linkedinService = SocialServiceFactory.create(TypeSocial.Linkedin);
+    if (process.env.API_POST_ENABLE) {
+        const posts = await post.find({})
+        const facebookService = SocialServiceFactory.create(TypeSocial.Facebook);
+        const linkedinService = SocialServiceFactory.create(TypeSocial.Linkedin);
 
-    posts.forEach(async (post: any) => {
-        // facebookService.getLikeShareComment(post)
-        linkedinService.getLikeShareComment(post)
-    });
+        posts.forEach(async (post: any) => {
+            facebookService.getLikeShareComment(post)
+            linkedinService.getLikeShareComment(post)
+        });
+    }
+
+    return res.status(200).send({
+        message: 'Sync insight success!'
+    })
 })
 
 //get ths list post
