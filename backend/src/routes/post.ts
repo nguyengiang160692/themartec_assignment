@@ -84,4 +84,9 @@ router.post('/sync-insight', async (req, res) => {
     });
 })
 
+//get ths list post
+router.get('/', async (req, res) => {
+    const posts = await post.find({}).populate('user', 'name email').sort({ createdAt: -1 })
+})
+
 export default router;

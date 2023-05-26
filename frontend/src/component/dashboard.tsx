@@ -9,6 +9,7 @@ import { useAppDispatch } from "../redux/store";
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import SyncIcon from '@mui/icons-material/Sync';
 import { syncInsight } from "../redux/post";
+import PostTable from "./table/post";
 
 function Dashboard() {
   const dispatch = useAppDispatch()
@@ -53,6 +54,9 @@ function Dashboard() {
                 </Button>
               </Grid>
             </Grid>
+            <Box>
+              <PostTable />
+            </Box>
           </Stack>
         </Box>
       </Container>

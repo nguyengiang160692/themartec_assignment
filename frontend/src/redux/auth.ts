@@ -74,12 +74,13 @@ export const { userLoading, loginSuccess, logoutSuccess, registerSuccess, loadPr
 // use useDispatch hook to dispatch actions later in components
 
 interface LoginData {
-    username: string;
+    identify: string;
     password: string;
 }
 
 interface RegisterData {
     username: string;
+    email: string;
     password: string;
 }
 

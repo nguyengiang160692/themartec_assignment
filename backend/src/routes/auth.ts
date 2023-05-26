@@ -3,7 +3,7 @@
 
 import express from 'express';
 import { User, IUser, qualityUser } from '../model/user';
-import { createNewUser, getUserByUsernameAndPassword, generateNewToken } from '../services';
+import { createNewUser, getUserByIdentifyAndPassword, generateNewToken } from '../services';
 import { ErrorResponse, SuccessResponse } from '../http/respose'
 import passport, { use } from 'passport';
 import SocialService, { SocialServiceFactory, TypeSocial } from '../socialService/serviceFactory';
@@ -64,7 +64,7 @@ router.post('/login', async (req, res) => {
     }
 
     try {
-        let returnUser = await getUserByUsernameAndPassword(req.body.username, req.body.password)
+        let returnUser = await getUserByIdentifyAndPassword(req.body.indentify, req.body.password)
 
         if (returnUser instanceof User && returnUser) {
 

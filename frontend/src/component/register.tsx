@@ -29,6 +29,7 @@ function Register() {
 
     dispatch(register({
       username: data.get('username') as string,
+      email: data.get('email') as string,
       password: data.get('password') as string,
     }))
   }
@@ -57,6 +58,16 @@ function Register() {
             label="Username"
             name="username"
             autoComplete="username"
+            autoFocus
+          />
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            id="email"
+            label="Email"
+            name="email"
+            autoComplete="email"
             autoFocus
           />
           <TextField

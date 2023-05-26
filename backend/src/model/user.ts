@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt'
 
 export interface IUser extends Document {
     username: string;
+    email: string;
     password: string;
     balance: number;
     salt?: string;
@@ -23,6 +24,7 @@ export interface IUserMeta {
 
 const UserSchema = new Schema<IUser>({
     username: { type: String, required: true, unique: true },
+    email: { type: String, require: true, unique: true },
     password: { type: String, require: true },
     salt: { type: String, require: true },
     balance: { type: Number, default: 0 },
@@ -82,6 +84,7 @@ export const User = model<IUser>('User', UserSchema);
 
 export const qualityUser = Joi.object({
     username: Joi.string().required().max(32),
+    email: Joi.string().email().required(),
     //require password complex
     password: Joi.string()
         .min(8)

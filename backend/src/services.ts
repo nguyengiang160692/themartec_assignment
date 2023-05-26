@@ -22,9 +22,16 @@ export const createNewUser = async (model: IUser) => {
 }
 
 // get user from database by username and hashed password from input is raw password
-export const getUserByUsernameAndPassword = async (username: string, inputPassword: string): Promise<typeof User | boolean> => {
+export const getUserByIdentifyAndPassword = async (identify: string, inputPassword: string): Promise<typeof User | boolean> => {
     try {
-        let user: any = await User.findOne({ username: username });
+        let user: any = await User.findOne(
+            {
+                $or: [
+                    { username: identify },
+                    { email: identify }
+                ]
+            }
+        );
 
         // compare input hashed password with hashed password in database
         const isMatch = await user?.comparePassword(inputPassword);
@@ -35,7 +42,7 @@ export const getUserByUsernameAndPassword = async (username: string, inputPasswo
         }
 
     } catch (err: any) {
-        console.log('Error on getUserByUsernameAndPassword', err.message);
+        console.log('Error on getUserByIdentifyAndPassword', err.message);
     }
 
     return false;

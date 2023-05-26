@@ -14,7 +14,7 @@ function Login() {
     const data = new FormData(event.currentTarget);
 
     dispatch(login({
-      username: data.get('username') as string,
+      identify: data.get('identify') as string,
       password: data.get('password') as string,
     }))
 
@@ -41,10 +41,10 @@ function Login() {
             margin="normal"
             required
             fullWidth
-            id="username"
-            label="Username"
-            name="username"
-            autoComplete="username"
+            id="identify"
+            label="Username or Email Address"
+            name="identify"
+            autoComplete="identify"
             autoFocus
           />
           <TextField
