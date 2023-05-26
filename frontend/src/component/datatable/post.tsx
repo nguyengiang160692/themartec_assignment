@@ -4,10 +4,13 @@ import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { getPosts } from '../../redux/post';
 import { Box, Grid, Stack, Typography } from '@mui/material';
 import styled from '@emotion/styled';
+import FacebookIcon from '@mui/icons-material/Facebook';
+import LinkedInIcon from '@mui/icons-material/LinkedIn';
 
 const NiceMeta = styled.div`
     font-size: 0.7rem;
     background: grey;
+    color: white;
     padding: 0px 0.2rem;
     border-radius: 5px;
 
@@ -19,7 +22,7 @@ const MetaDisplay = (props: any) => {
             <Grid container spacing={1}>
                 <Grid item>
                     <Typography sx={{ display: 'block', minWidth: '80px' }} fontSize={'0.7rem'}>
-                        Facebook
+                        <FacebookIcon />
                     </Typography>
                 </Grid>
                 <Grid item>
@@ -41,7 +44,7 @@ const MetaDisplay = (props: any) => {
             <Grid container spacing={1}>
                 <Grid item>
                     <Typography sx={{ display: 'block', minWidth: '80px' }} fontSize={'0.7rem'}>
-                        Linkedin
+                        <LinkedInIcon />
                     </Typography>
                 </Grid>
                 <Grid item>
@@ -77,29 +80,30 @@ const PostTable = () => {
 
     const columns: GridColDef[] = [
         {
-            field: 'content',
-            headerName: 'Content',
-            flex: 3,
+            field: 'meta',
+            headerName: 'Meta (Like/Share/Comment)',
             sortable: false,
-            align: 'left',
-            valueGetter: (params: GridValueGetterParams) => {
-                return `${params.row.content}`
-            }
+            width: 200,
+            renderCell: (params) => (
+                <MetaDisplay meta={params.row.meta} />
+            )
         },
         {
-            field: 'user', headerName: 'Author', flex: 1, sortable: false,
+            field: 'user', headerName: 'Author', sortable: false,
+            width: 100,
             valueGetter: (params: GridValueGetterParams) => {
                 return `${params.row.user?.username}`
             }
         },
         {
-            field: 'meta',
-            headerName: 'Meta (Like/Share/Comment)',
+            field: 'content',
+            headerName: 'Content',
+            flex: 4,
             sortable: false,
-            flex: 2,
-            renderCell: (params) => (
-                <MetaDisplay meta={params.row.meta} />
-            )
+            align: 'left',
+            valueGetter: (params: GridValueGetterParams) => {
+                return `${params.row.content}`
+            }
         },
     ];
 

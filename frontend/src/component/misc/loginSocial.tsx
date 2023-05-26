@@ -39,12 +39,15 @@ const LoginSocial = () => {
             justifyContent={
                 {
                     xs: 'center',
-                    sm: 'space-between'
+                    sm: 'flex-end'
                 }
             }
             rowSpacing={{
                 xs: 1,
                 sm: 0
+            }}
+            columnSpacing={{
+                xs: 1,
             }}
         >
             <Grid item>
@@ -52,7 +55,7 @@ const LoginSocial = () => {
                     {
                         auth?.user?.meta?.facebook?.name &&
                         <Typography>
-                            Hello, {auth?.user?.meta?.facebook?.name || ''}
+                            {auth?.user?.meta?.facebook?.name || ''}
                         </Typography>
                     }
                     {
@@ -68,7 +71,7 @@ const LoginSocial = () => {
                     {
                         auth?.user?.meta?.linkedin?.name &&
                         <Typography>
-                            Hello, {auth?.user?.meta?.linkedin?.name || ''}
+                            {auth?.user?.meta?.linkedin?.name || ''}
                         </Typography>
                     }
                     {
