@@ -92,7 +92,7 @@ router.post('/login', async (req, res) => {
             }
         }
 
-        res.status(400).send(<ErrorResponse>{
+        res.status(401).send(<ErrorResponse>{
             message: 'Wrong username or password!'
         });
     } catch (err: any) {

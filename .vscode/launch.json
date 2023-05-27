@@ -31,6 +31,34 @@
                 "FACEBOOK_APP_SECRET": "56a8297d4ad9a184bdeb36eeeddbbad6",
                 "ENABLE_API_REQUEST": "0",
             }
+        },
+        {
+            "name": "Launch Uni test to debug",
+            "type": "node",
+            "runtimeExecutable": "node",
+            "console": "integratedTerminal",
+            "request": "launch",
+            "restart": true,
+            "program": "${workspaceFolder}/backend/src/test/auth.test.ts",
+            "preLaunchTask": "tsc: watch - backend/tsconfig.json",
+            "runtimeArgs": [
+                "--inspect"
+            ],
+            "env": {
+                "MONGO_HOST": "localhost",
+                "MONGO_PORT": 27017,
+                "MONGO_SOURCE": "themartec_db",
+                "MONGO_USERNAME": "themartec_user",
+                "MONGO_PASSWORD": "themartec_password",
+                "JWT_SECRET": "themartec_secret",
+                "LINKEDIN_CLIENT_ID": "862jkqky51ie7u",
+                "LINKEDIN_CLIENT_SECRET": "PRXd2G4C3Wm6B2h3",
+                "LINKEDIN_REDIRECT_URI": "http://localhost:3005/api/auth/linkedin/callback",
+                "FACEBOOK_PAGE_ID": "269847197064443",
+                "FACEBOOK_APP_ID": "665878102031300",
+                "FACEBOOK_APP_SECRET": "56a8297d4ad9a184bdeb36eeeddbbad6",
+                "ENABLE_API_REQUEST": "0",
+            }
         }
     ]
 }

@@ -58,8 +58,8 @@ Tech lib uses in backend:
 - Passport
 - Bcryptjs (Hash & salt)
 - Jsonwebtoken
-- Nodemon (develop process)
-- Mongoose-paginate-v2 (paginate data)
+- mocha (for unit test)
+- supertest (for unit test)
 
 ### Setup
 
@@ -83,19 +83,26 @@ Tech lib uses in backend:
 - So I will have to create a facebook page then post though that
 
 - Step 3: Login to social network
-  - On frontend side the SDK will handle login process with given configuration (Facebook configuration scope), then facebook return to us short-live token, then send that token to backend side to exchange to long-live token (Because is require app_secret_key so we do on backend) and also exchange for page-token (to post on page) [Reference here](https://developers.facebook.com/docs/pages/access-tokens/)
+  - On frontend side the SDK will handle login process with given configuration (Facebook configuration scope), then facebook return to us short-live token, then send that token to backend side to exchange to long-live token (Because is require app_secret_key so we do on backend) and also exchange for page-token (to post on page) [Reference here](https://developers.facebook.com/docs/pages/access-tokens/án 
   
 - Step 4: Post new article to Backend side to save and post to social networks (we have long live token & page token on previous step), after success posted there is returned post_id, so we can continue to fetch likes share comments count on cronjob schedule
 
 ### Mainly ideas (For Linkedin)
-
 Because linkedin dont have sdk so We have to handle Oauth 2 process manually [Reference here](https://learn.microsoft.com/en-us/linkedin/shared/authentication/authorization-code-flow?context=linkedin%2Fconsumer%2Fcontext&tabs=HTTPS1)
 
 - Step 1: On frontend we have to redirect user browser to linkedin login page with some params
 https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=YOUR_CLIENT_ID^&redirect_uri=YOUR_REDIRECT_URI^&state=YOUR_STATE^&scope=YOUR_SCOPE
   - after user successfully approved, linkedin will redirect to your redirect_uri with code and state params
 
-- Step 2: 
+- Step 2: Linkedin 
+
+
+### Thing to do
+- Remove all config in .env.example (FE, BE), I will give the reviewer my .env file
+- Remove lauch.json in .vscode folder or remove enviroment variables only
+- Prepare a  access_token in .env for Facebook and Linkedin (Because the reviewer may not have permission to post)
+- Write unit test for backend
+
 
 
 
