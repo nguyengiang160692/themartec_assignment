@@ -1,5 +1,7 @@
 # The Martec Assignment
+
 # Table of contents
+
 1. [Introduction](#0000)
 1. [Stack and libraries](#0001)
 1. [Setup app](#0002)
@@ -19,13 +21,16 @@
 ## Stack & libraries <a name="0001"></a>
 
 ### Frontend
+
 - React
 - Redux
 - Redux-thunk (To make the process of asynchronous data flow easier)
 - React-router-dom
 - Axios
 - Material-UI
+
 ### Backend
+
 - Laradock (docker for development, mostly I use for database mongodb in this assignment)
 - nvm (node version management) => require node version 18
 - Nodejs
@@ -38,8 +43,8 @@
 - mocha (for unit test)
 - supertest (for unit test)
 
-
 ### Initial setup <a name="0002"></a>
+
 ```bash
 cd frontend 
 cp .env.example .env
@@ -51,6 +56,7 @@ yarn
 ```
 
 ### Create new database using mongosh (Or you can create any way you want)
+
 ```bash
 mongosh --authenticationDatabase <your_auth_source_db> -u <username> -p <password>
 
@@ -64,6 +70,7 @@ db.createUser({
   ],
 })
 ```
+
 Please set .env variable (/src/backend/.env)
 <ul>
   <li>MONGO_HOST=your_db_host</li>
@@ -76,6 +83,7 @@ Please set .env variable (/src/backend/.env)
 ## Setup Social applications <a name="0003"></a>
 
 ### Facebook App <a name="0004"></a>
+
   <ol>
     <li>
       Create new Facebook App (Type bussiness)
@@ -125,37 +133,61 @@ Please set .env variable (/src/backend/.env)
     </li>
   </ol>
 
-
-
 ### Linkedin App <a name="0005"></a>
 
-### Mainly ideas (For facebook)
-- I got a situation here, I found that can not post to my own wall with facebook restriction since (2018)
-- So I will have to create a facebook page then post though that
+  <ol>
+    <li>
+    Create new Linkedin App & Company
+      <ul>
+        <li>
+          Add products
+          <ul>
+            <li>Share on Linkedin</li>
+            <li>Sign In with Linkedin</li>
+          </ul>
+        </li>
+        <li>
+          Setup "Authorized redirect URLs for your app" for get access_token after successfully login by user
+            <ul>
+              <li>http://localhost:3005/api/auth/linkedin/callback (our backend side)</li>
+            </ul>
+        </li>
+      </ul>  
+    </li>
+    <li>
+      After add products, set permissions, please set .env variable at <b>/src/backend/.env</b>
+      <ul>
+        <li>
+          LINKEDIN_CLIENT_ID=app_client_id
+        </li>
+        <li>
+          LINKEDIN_CLIENT_SECRET=app_client_secret
+        </li>
+        <li>
+          LINKEDIN_REDIRECT_URI=http://localhost:3005/api/auth/linkedin/callback
+        </li>
+      </ul>  
+    </li>
+     <li>
+      After add products, set permissions, please set .env variable at <b>/src/backend/.env</b>
+      <ul>
+        <li>
+          REACT_APP_LINKEDIN_CLIENT_ID=app_client_id
+        </li>
+        <li>
+           REACT_APP_LINKEDIN_REDIRECT_URI=http://localhost:3005/api/auth/linkedin/callback
+        </li>
+      </ul>  
+    </li>
+  </ol>
 
-- Step 3: Login to social network
-  - On frontend side the SDK will handle login process with given configuration (Facebook configuration scope), then facebook return to us short-live token, then send that token to backend side to exchange to long-live token (Because is require app_secret_key so we do on backend) and also exchange for page-token (to post on page) [Reference here](https://developers.facebook.com/docs/pages/access-tokens/án 
-  
-- Step 4: Post new article to Backend side to save and post to social networks (we have long live token & page token on previous step), after success posted there is returned post_id, so we can continue to fetch likes share comments count on cronjob schedule
+### Mainly ideas (For facebook)
 
 ### Mainly ideas (For Linkedin)
-Because linkedin dont have sdk so We have to handle Oauth 2 process manually [Reference here](https://learn.microsoft.com/en-us/linkedin/shared/authentication/authorization-code-flow?context=linkedin%2Fconsumer%2Fcontext&tabs=HTTPS1)
-
-- Step 1: On frontend we have to redirect user browser to linkedin login page with some params
-https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=YOUR_CLIENT_ID^&redirect_uri=YOUR_REDIRECT_URI^&state=YOUR_STATE^&scope=YOUR_SCOPE
-  - after user successfully approved, linkedin will redirect to your redirect_uri with code and state params
-
-- Step 2: Linkedin 
-
 
 ### Thing to do
+
 - Remove all config in .env.example (FE, BE), I will give the reviewer my .env file
 - Remove lauch.json in .vscode folder or remove enviroment variables only
 - Prepare a  access_token in .env for Facebook and Linkedin (Because the reviewer may not have permission to post)
 - Write unit test for backend
-
-
-
-
-
-
