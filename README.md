@@ -183,11 +183,39 @@ Please set .env variable (/src/backend/.env)
 
 ### Mainly ideas (For facebook)
 
+#### Sign in process
+
+- Because Facebook provide Javascript SDK to login, so Oauth2 sign-in proccess can be done by using Javascript SDK
+- Client side
+  - After successfully login, I will get **access_token** (short-live), then I will send that token to backend
+- Backend side
+  - On backend side, I will use **access_token** to get **page_token**
+  - After get **page_token**, I will exchange **page_token** to **long-live access_token** (long-live)
+  - Save both tokens to database to request later
+
+#### Posting process
+
+- Use **page_token** to post thought this `/${pageId}/feed` endpoint, then save post_id to database to get like share comment later
+
+#### Get like share comment
+
+- Use **page_token** to get like share comment thought this `/${post_id}/?fields=likes.summary(true),shares.summary(true),comments.summary(true)` endpoint every 15 minutes
+
 ### Mainly ideas (For Linkedin)
+
+- Because Linkedin doesn't provide Javascript SDK to login, so Oauth2 sign-in proccess must be done by using backend, and receive **access_token** from Linkedin via assigned callback url on setup process
+
+#### Posting proccess
+
+- Use **access_token** to post thought this `/ugcPosts` endpoint, then save post_id to database to get like share comment later
+
+#### Get like share comment
+
+- Linkedin has endpoint to get like share comment count, but it require a submission for review your app before having permissions to do further, so we have to crawl HTML from this URL `https://www.linkedin.com/embed/feed/update/${post_id}` to get like share comment count, actually this link is not contains the share count, I only can get likes count and shares count
 
 ### Thing to do
 
-- Remove all config in .env.example (FE, BE), I will give the reviewer my .env file
+- Remove all configurations in .env.example (FE, BE), I will give reviewers my .env file
 - Remove lauch.json in .vscode folder or remove enviroment variables only
 - Prepare a  access_token in .env for Facebook and Linkedin (Because the reviewer may not have permission to post)
-- Write unit test for backend
+- Write more unit test for posting proccess
