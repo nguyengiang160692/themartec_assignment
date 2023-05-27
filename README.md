@@ -1,54 +1,27 @@
-### Create new database
+# The Martec Assignment
+# Table of contents
+1. [Introduction](#0000)
+2. [Stack and libraries](#0001)
+3. [Setup](#0002)
 
-```bash
-mongosh
+## Introduction <a name="0000" />
 
-# authentication source in admin database, default is admin
-use admin
-# Login with your credentials
-db.auth('<username>', '<password>')
+<p>
+  Basically, I have to create a web application that allows users to post articles to social networks (Facebook, Linkedin) and fetch likes, shares, comments count of that post.
+</p>
 
-db.createUser({
-  user: 'themartec_user',
-  pwd: 'themartec_password',
-  roles: [
-    { role: 'dbOwner', db: 'themartec_db' },
-  ],
-})
+---
 
-use themartec_db
-```
+## Stack & libraries <a name="0001"/>
 
-### Usage instructions
-
-#### Frontend
-
-```bash
-cd frontend 
-npm install
-npm run start
-```
-
-Tech lib uses in frontend:
-
+### Frontend
 - React
 - Redux
 - Redux-thunk (To make the process of asynchronous data flow easier)
 - React-router-dom
 - Axios
-- Material-ui
-
-#### Backend
-
-```bash
-cd backend
-npm install
-cp .env.example .env
-npm run dev
-```
-
-Tech lib uses in backend:
-
+- Material-UI
+### Backend
 - Laradock (docker for development, mostly I use for database mongodb in this assignment)
 - nvm (node version management) => require node version 18
 - Nodejs
@@ -61,22 +34,70 @@ Tech lib uses in backend:
 - mocha (for unit test)
 - supertest (for unit test)
 
-### Setup
 
-- Firstly need to create a Facebook App (Type bussiness)
-- need to create Configuaration with permissions
-  email
-  pages_manage_posts
-  pages_show_list
-  pages_read_engagement
-  pages_manage_engagement
-  pages_read_user_content
+### Initial setup <a name="0002"/ >
+```bash
+cd frontend 
+cp .env.example .env
+yarn
+
+cd backend
+cp .env.example .env
+yarn
+```
+
+### Create new database using mongosh (Or you can create any way you want)
+```bash
+mongosh --authenticationDatabase <your_auth_source_db> -u <username> -p <password>
+
+use '<your_auth_source_db>'
+
+db.createUser({
+  user: 'themartec_user',
+  pwd: 'themartec_password',
+  roles: [
+    { role: 'dbOwner', db: 'themartec_db' },
+  ],
+})
+```
+
+## Setup Social applications
+
+### Facebook App
+  <ol>
+    <li>
+      Create new Facebook App (Type bussiness)
+      <ul>
+        <li>
+          Create new product "Facebook Login For Bussiness"
+          <ul>
+          <li>
+              Create Configuration for that product contains follow permissions
+              <ul>
+                  <li>email</li>
+                  <li>pages_manage_posts</li>
+                  <li>pages_show_list</li>
+                  <li>pages_read_engagement</li>
+                  <li>pages_manage_engagement</li>
+                  <li>pages_read_user_content</li>
+              </ul>
+          </li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li>
+      After created app, set permissions, please set .env variable (/src/backend/.env)
+      <ul>
+        <li>- FACEBOOK_APP_ID=your_app_id</li>
+        <li>- FACEBOOK_APP_SECRET=your_app_secret</li>
+      </ul>
+    </li>
+  </ol>
 - Need to get your page ID [Here](https://www.facebook.com/help/android-app/1503421039731588)
 
+### Linkedin App
 
-### How to use (Basic flow)
-- Step 1: Create a new user on our system (aka a local user)
-- Step 2: Login with the new user
 
 ### Mainly ideas (For facebook)
 - I got a situation here, I found that can not post to my own wall with facebook restriction since (2018)

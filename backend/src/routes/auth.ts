@@ -28,7 +28,7 @@ router.post('/register', (req, res) => {
     const { error, value } = qualityUser.validate(req.body)
 
     if (error) {
-        res.status(400).send(<ErrorResponse>{
+        return res.status(400).send(<ErrorResponse>{
             message: error.details[0].message,
         })
     }
@@ -42,15 +42,15 @@ router.post('/register', (req, res) => {
                     message: 'Register success!',
                     code: 201
                 }
-                res.status(201).send(response)
+                return res.status(201).send(response)
             })
             .catch((err) => {
-                res.status(400).send(<ErrorResponse>{
+                return res.status(400).send(<ErrorResponse>{
                     message: err.message,
                 })
             })
     } catch (err: any) {
-        res.status(400).send(<ErrorResponse>{
+        return res.status(400).send(<ErrorResponse>{
             message: err.message,
         })
     }
