@@ -1,10 +1,14 @@
 # The Martec Assignment
 # Table of contents
 1. [Introduction](#0000)
-2. [Stack and libraries](#0001)
-3. [Setup](#0002)
+1. [Stack and libraries](#0001)
+1. [Setup app](#0002)
+1. [Setup Social applications](#0003)
+    1. [Facebook App](#0004)
+    1. [Linkedin App](#0005)
+1. [TODO](#0006)
 
-## Introduction <a name="0000" />
+## Introduction <a name="0000"></a>
 
 <p>
   Basically, I have to create a web application that allows users to post articles to social networks (Facebook, Linkedin) and fetch likes, shares, comments count of that post.
@@ -12,7 +16,7 @@
 
 ---
 
-## Stack & libraries <a name="0001"/>
+## Stack & libraries <a name="0001"></a>
 
 ### Frontend
 - React
@@ -35,7 +39,7 @@
 - supertest (for unit test)
 
 
-### Initial setup <a name="0002"/ >
+### Initial setup <a name="0002"></a>
 ```bash
 cd frontend 
 cp .env.example .env
@@ -60,10 +64,18 @@ db.createUser({
   ],
 })
 ```
+Please set .env variable (/src/backend/.env)
+<ul>
+  <li>MONGO_HOST=your_db_host</li>
+  <li>MONGO_PORT=27017</li>
+  <li>MONGO_SOURCE=themartec_db</li>
+  <li>MONGO_USERNAME=themartec_user</li>
+  <li>MONGO_PASSWORD=themartec_password</li>
+</ul>
 
-## Setup Social applications
+## Setup Social applications <a name="0003"></a>
 
-### Facebook App
+### Facebook App <a name="0004"></a>
   <ol>
     <li>
       Create new Facebook App (Type bussiness)
@@ -87,17 +99,35 @@ db.createUser({
       </ul>
     </li>
     <li>
-      After created app, set permissions, please set .env variable (/src/backend/.env)
+      After created app, set permissions, please set .env variable at <b>/src/backend/.env</b>
       <ul>
-        <li>- FACEBOOK_APP_ID=your_app_id</li>
-        <li>- FACEBOOK_APP_SECRET=your_app_secret</li>
+        <li>FACEBOOK_APP_ID=your_app_id</li>
+        <li>FACEBOOK_APP_SECRET=your_app_secret</li>
+      </ul>
+    </li>
+    <li>
+      Set .env variable at <b>/src/frontent/.env</b>
+      <ul>
+        <li>
+          REACT_APP_FACEBOOK_CLIENT_ID=your_app_id
+        </li>
+        <li>REACT_APP_LOGIN_CONFIGURATION_ID=your_configuration_id</li>
+      </ul>
+    </li>
+    <li>
+      Setup the page you want to post .env variable at <b>/src/backend/.env</b>
+      <ul>
+        <li>FACEBOOK_PAGE_ID=your_page_id</li>
+        <li>
+        Need to get your page ID, please referer <a href="https://www.facebook.com/help/android-app/1503421039731588">here</a>
+        </li>
       </ul>
     </li>
   </ol>
-- Need to get your page ID [Here](https://www.facebook.com/help/android-app/1503421039731588)
 
-### Linkedin App
 
+
+### Linkedin App <a name="0005"></a>
 
 ### Mainly ideas (For facebook)
 - I got a situation here, I found that can not post to my own wall with facebook restriction since (2018)
