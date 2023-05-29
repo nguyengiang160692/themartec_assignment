@@ -214,8 +214,6 @@ Please set .env variable (/src/backend/.env)
 - Linkedin has endpoint to get like share comment count, but it require a submission for review your app before having permissions to do further, so we have to crawl HTML from this URL `https://www.linkedin.com/embed/feed/update/${post_id}` to get like share comment count, actually this link is not contains the share count, I only can get likes count and shares count
 
 ### Thing to do
-
-- Remove all configurations in .env.example (FE, BE), I will give reviewers my .env file
-- Remove lauch.json in .vscode folder or remove enviroment variables only
-- Prepare a  access_token in .env for Facebook and Linkedin (Because the reviewer may not have permission to post)
-- Write more unit test for posting proccess
+- Write more unit-test for posting process
+- Facebook: an user can have many pages, so we need to add more page_id to database instead of using .env variable
+- Linkedin: find out way to get shares in post
